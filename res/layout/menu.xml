@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:myapp="http://schemas.android.com/apk/res/com.StupidRat.SysLvl"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background">
+  
+ 
+<RelativeLayout 
+	android:id="@+id/RelativeLayout01" 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content">
+
+	<ImageView 
+		android:id="@+id/ImageView02" 
+		android:layout_height="wrap_content" 
+		android:background="@drawable/banner" 
+		android:layout_alignParentTop="true" 
+		android:layout_centerHorizontal="true" 
+		android:layout_width="fill_parent">
+	</ImageView>
+	
+	<com.admob.android.ads.AdView
+		android:id="@+id/ad"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/ImageView02"
+		myapp:backgroundColor="#000000"
+		myapp:primaryTextColor="#FFFFFF"
+		myapp:secondaryTextColor="#CCCCCC"/>
+
+</RelativeLayout>
+
+
+<RelativeLayout 
+	android:id="@+id/RelativeLayout02" 
+	android:layout_width="wrap_content" 
+	android:layout_height="wrap_content">
+	
+	<ListView 
+		android:layout_height="wrap_content" 
+		android:id="@+id/ListView_Menu" 
+		android:layout_width="fill_parent" 
+		android:layout_alignParentTop="true">
+	</ListView>
+	
+</RelativeLayout>
+
+
+
+</LinearLayout>

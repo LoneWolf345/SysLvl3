@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="cables_list">
+        <item>RG-59</item>
+        <item>RG-6</item>
+        <item>RG-11</item>
+        <item>P3 .500</item>
+        <item>P3 .625</item>
+        <item>P3 .750</item>
+        <item>P3 .875</item>
+    </string-array>
+
+    <string-array name="device_list">
+    	<item>4v2p</item>
+    	<item>8v2p</item>
+    	<item>11v2p</item>
+    	<item>14v2p</item>
+    	<item>17v2p</item>
+    	<item>20v2p</item>
+    	<item>23v2p</item>
+    	<item>26v2p</item>
+    	<item>29v2p</item>
+    	<item>32v2p</item>
+    	<item>8v4p</item>
+    	<item>11v4p</item>
+    	<item>14v4p</item>
+    	<item>17v4p</item>
+    	<item>20v4p</item>
+    	<item>23v4p</item>
+    	<item>26v4p</item>
+    	<item>29v4p</item>
+    	<item>32v4p</item>
+    	<item>11v8p</item>
+    	<item>14v8p</item>
+    	<item>17v8p</item>
+    	<item>20v8p</item>
+    	<item>23v8p</item>
+    	<item>26v8p</item>
+    	<item>29v8p</item>
+    	<item>32v8p</item>
+    </string-array>
+    <string-array name="system_list">
+    	<item>Custom</item>
+    	<item>ND, Fargo</item>
+    	<item>ID, Boise</item>
+    	<item>ID, West Valley</item>
+    </string-array>
+</resources>

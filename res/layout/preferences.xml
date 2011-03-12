@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="Starting signal Levels">
+		<EditTextPreference
+            android:key="HighFreqOutput"
+            android:inputType="numberDecimal|numberSigned"
+            android:defaultValue="45"
+            android:title="Levels @ 550Mhz"
+            android:dialogTitle="Set starting levels for 550Mhz" />
+       
+       	<EditTextPreference
+            android:key="LowFreqOutput"
+            android:inputType="numberDecimal|numberSigned"
+            android:defaultValue="36"
+            android:title="Levels @ 50Mhz"
+            android:dialogTitle="Set starting levels for 50Mhz" />
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Frequency Sampling">
+		<ListPreference
+            android:key="HighFreqSelection"
+            android:title="High Frequency"
+            android:entries="@array/frequency_list"
+            android:dialogTitle="Set a Frequency" />
+        <ListPreference
+            android:key="LowFreqSelection"
+            android:title="Low Frequency"
+            android:entries="@array/frequency_list"
+            android:dialogTitle="Set a Frequency" />
+	</PreferenceCategory>
+</PreferenceScreen>

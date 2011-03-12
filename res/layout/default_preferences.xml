@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<PreferenceCategory
+		android:title="Starting Levels">
+		
+		<EditTextPreference
+            android:key="EditTextPreferenceHighLevels"
+            android:defaultValue="45"
+            android:title="550Mhz"
+            android:dialogTitle="Set starting levels for 550Mhz" />
+       
+       	<EditTextPreference
+            android:key="EditTextPreferenceLowLevels"
+            android:defaultValue="36"
+            android:title="50Mhz"
+            android:dialogTitle="Set starting levels for 50Mhz" />
+	
+	
+	</PreferenceCategory>
+
+</PreferenceScreen>

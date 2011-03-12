@@ -1,0 +1,16 @@
+System Levels Calculator
+
+SysLvl was designed to help Cable TV field technicians calculate signal levels from tap to tap.
+
+SETTINGS
+
+<TBD>
+
+SUPPORT INFORMATION
+
+"SysLvls" was developed by James C Swailes. 
+
+Phone: (218)585-9653
+Email: cswailes@gmail.com
+Website: http://www.stupidasarat.com 
+Address: 5031 44th Ave S #106, Fargo, ND 58104

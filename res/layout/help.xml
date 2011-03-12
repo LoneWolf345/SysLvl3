@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/background">
+
+
+<TextView android:text="@+id/TextView02" android:id="@+id/TextView_HelpText" android:layout_height="fill_parent" android:layout_width="fill_parent" android:linksClickable="true" android:autoLink="web|email|phone|map|all"></TextView>
+</LinearLayout>

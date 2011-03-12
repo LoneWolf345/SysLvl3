@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="app_name">SysLvl</string>
+    <string name="help">Help Screen</string>
+    <string name="splash">Splash Screen</string>
+    <string name="menu">Main Menu</string>
+    <string name="settings">Settings Screen</string>
+    <string name="syslvl">System Levels</string>
+    <string name="app_version_info">V 3.0</string>
+    <string name="menu_item_settings">Settings</string>
+    <string name="menu_item_play">Play Game</string>
+    <string name="menu_item_scores">View Scores</string>
+    <string name="menu_item_help">Help</string>
+    <string name="summary_blank">Cable:none \nLenght:000ft \nDevice:none </string>
+    <string name="tap_blank">Out of Tap\nHigh Mhz:00.0\nLow Mhz:00.0</string>
+    <string name="ongoing_blank">Ongoing\nHigh Mhz:00.0\nLow Mhz:00.0</string>
+    <string name="cable_type_prompt">Cable Type</string>
+    <string name="device_type_prompt">Device Type</string>
+    <string name="span_blank">~ Span # ~     000 ft of CABLE to DEVICE at HIGH/LOW Mhz\n Readings| Tap: 00.0 / 00.0  |  Out Device: 00.0 / 00.0</string>
+    <string-array name="CableList">
+        <item>RG-59</item>
+        <item>RG-6</item>
+        <item>RG-11</item>
+        <item>P3 .500</item>
+        <item>P3 .625</item>
+        <item>P3 .750</item>
+        <item>P3 .875</item>
+    </string-array>
+    <string-array name="frequency_list">
+        <item>5 Mhz</item>
+        <item>55 Mhz</item>
+        <item>550 Mhz</item>
+        <item>750 Mhz</item>
+        <item>865 Mhz</item>
+        <item>1000 Mhz</item>
+    </string-array>
+    <string-array name="DeviceList">
+        <item>4v2p</item>
+        <item>8v2p</item>
+        <item>11v2p</item>
+        <item>14v2p</item>
+        <item>17v2p</item>
+        <item>20v2p</item>
+        <item>23v2p</item>
+        <item>26v2p</item>
+        <item>29v2p</item>
+        <item>32v2p</item>
+        <item>8v4p</item>
+        <item>11v4p</item>
+        <item>14v4p</item>
+        <item>17v4p</item>
+        <item>20v4p</item>
+        <item>23v4p</item>
+        <item>26v4p</item>
+        <item>29v4p</item>
+        <item>32v4p</item>
+        <item>11v8p</item>
+        <item>14v8p</item>
+        <item>17v8p</item>
+        <item>20v8p</item>
+        <item>23v8p</item>
+        <item>26v8p</item>
+        <item>29v8p</item>
+        <item>32v8p</item>
+        <item>DC8</item>
+        <item>DC12</item>
+        <item>DC16</item>
+        <item>2way</item>
+        <item>Bal3way</item>
+        <item>UB3wayCold</item>
+        <item>UB3wayHot</item>
+    </string-array>
+</resources>

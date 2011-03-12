@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:myapp="http://schemas.android.com/apk/res/com.StupidRat.SysLvl"
+	android:orientation="vertical"
+	android:layout_width="wrap_content"
+	android:layout_height="fill_parent">
+  
+     <RelativeLayout
+    	android:id="@+id/RelativeLayoutTopBar2"
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content">
+    	<TextView
+    		android:id="@+id/TextViewAppName2"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:layout_alignParentLeft="true"
+    		android:layout_centerVertical="true"
+    		android:text="@string/app_name"/>
+    	<TextView
+    		android:id="@+id/TextViewAppVersion2"
+    		android:layout_width="wrap_content"
+    		android:layout_height="wrap_content"
+    		android:layout_toRightOf="@id/TextViewAppName2"
+    		android:layout_marginLeft="10dp"
+    		android:layout_centerVertical="true"
+    		android:text="@string/app_version_info"/>
+    	<Button
+    		android:id="@+id/ButtonUpdate"
+    		android:layout_width="wrap_content"
+    		android:layout_height="40dp"
+    		android:layout_alignParentRight="true"
+    		android:text="Update"/>	
+    	<Button
+    		android:id="@+id/ButtonDelete"
+    		android:layout_width="wrap_content"
+    		android:layout_height="40dp"
+    		android:layout_toLeftOf="@id/ButtonUpdate"
+    		android:text="Delete"/>	
+    </RelativeLayout>
+
+	<TableLayout
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:stretchColumns="2">
+    	<TableRow>
+    		<TextView
+    			android:id="@+id/TextViewCableLabelTop"
+    			android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:text="Cable"/>
+    		<TextView
+    			android:id="@+id/TextViewLengthLabelTop"
+    			android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:text="Cable length (ft):"/>
+    	</TableRow>
+    	<TableRow>
+    		<Spinner
+    			android:id="@+id/SpinnerCableType"
+    			android:layout_width="150dp"
+    			android:layout_height="wrap_content"/>
+    		<EditText
+    			android:id="@+id/EditTextLength"
+    			android:layout_width="150dp"
+    			android:layout_height="wrap_content"
+    			android:text="100"
+    			android:inputType="number"/>
+    	</TableRow>
+    	<TableRow>
+    		<TextView
+    			android:id="@+id/TextViewDeviceLabelTop"
+    			android:layout_width="wrap_content"
+    			android:layout_height="wrap_content"
+    			android:text="Device"/>
+    	</TableRow>
+    	<TableRow>
+    		<Spinner
+    			android:id="@+id/SpinnerDevice"
+    			android:layout_width="150dp"
+    			android:layout_height="wrap_content"/>	
+    	</TableRow>
+    </TableLayout>
+    <TableLayout
+    	android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:stretchColumns="2">
+    	<TableRow>
+    		<TextView
+            	android:text=""
+            	android:padding="3dip" />
+        	<TextView
+            	android:text="Tap/Cold"
+            	android:gravity="center"
+            	android:padding="3dip" />
+        	<TextView
+            	android:text="Through/Hot"
+            	android:gravity="center"
+            	android:padding="3dip" />
+   		</TableRow>
+
+    	<TableRow>
+        	<TextView
+            	android:text="550Mhz:"
+            	android:gravity="left"
+       	     	android:padding="3dip" />
+        	<TextView
+        		android:id="@+id/TextViewTapHighDetail"
+            	android:text="1"
+            	android:gravity="center"
+            	android:padding="3dip" />
+            <TextView
+            	android:id="@+id/TextViewHotHighDetail"
+            	android:text="3"
+            	android:gravity="center"
+            	android:padding="3dip" />          	
+    	</TableRow>
+    	<TableRow>
+        	<TextView
+            	android:text="50Mhz:"
+            	android:gravity="left"
+       	     	android:padding="3dip" />
+        	<TextView
+        		android:id="@+id/TextViewTapLowDetail"
+            	android:text="2"
+            	android:gravity="center"
+            	android:padding="3dip" />
+            <TextView
+            	android:id="@+id/TextViewHotLowDetail"
+            	android:text="4"
+            	android:gravity="center"
+            	android:padding="3dip" />          	
+    	</TableRow>
+    </TableLayout>
+
+</LinearLayout>
