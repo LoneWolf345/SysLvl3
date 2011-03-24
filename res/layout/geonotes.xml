@@ -11,18 +11,18 @@
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content">
     	<TextView
-    		android:id="@+id/TextViewAmpOut"
+    		android:id="@+id/TextViewLocationAcuracy"
     		android:layout_width="wrap_content"
     		android:layout_height="wrap_content"
     		android:layout_alignParentLeft="true"
     		android:layout_centerVertical="true"
-    		android:text="Starting 0/0"/>
+    		android:text="Acuracy # ft"/>
     	<Button
-    		android:id="@+id/ButtonAddSpan"
+    		android:id="@+id/ButtonAddNote"
     		android:layout_width="wrap_content"
     		android:layout_height="40dp"
     		android:layout_alignParentRight="true"
-    		android:text="Add Span"/> 
+    		android:text="Add Note"/> 
     		<!--
     		android:layout_toLeftOf="@id/ButtonCalculate" -->
     		
