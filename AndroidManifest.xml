@@ -29,6 +29,10 @@
         	android:name="SpanDetails"></activity>
         <activity
         	android:name=".Preferences"></activity>
+        <activity
+        	android:name="GeoNotes"></activity>
+        <activity 
+        	android:name="NoteEdit"/>
 
 	<!-- The application's publisher ID assigned by AdMob -->
 	<meta-data android:value="a14d251ae6865db" android:name="ADMOB_PUBLISHER_ID" />

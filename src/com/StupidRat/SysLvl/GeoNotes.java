@@ -44,8 +44,7 @@ public class GeoNotes extends ListActivity {
         int[] to = new int[]{R.id.text1};
         
         // Now create a simple cursor adapter and set it to display
-        SimpleCursorAdapter notes = 
-        	    new SimpleCursorAdapter(this, R.layout.notes_row, notesCursor, from, to);
+        SimpleCursorAdapter notes = new SimpleCursorAdapter(this, R.layout.notes_row, notesCursor, from, to);
         setListAdapter(notes);
     }
     
@@ -100,8 +99,7 @@ public class GeoNotes extends ListActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, 
-                                    Intent intent) {
+    protected void onActivityResult(int requestCode, int resultCode,Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         fillData();
     }

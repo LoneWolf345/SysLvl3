@@ -32,8 +32,9 @@ public class SysLvlMenuActivity extends SysLvlActivity {
         
         ListView menuList = (ListView) findViewById(R.id.ListView_Menu);
         String[] items = { getResources().getString(R.string.syslvl),
-                getResources().getString(R.string.settings),
-                getResources().getString(R.string.help),};
+     		   			   getResources().getString(R.string.geonotes),
+                		   getResources().getString(R.string.settings),
+                		   getResources().getString(R.string.help),};
         ArrayAdapter<String> adapt = new ArrayAdapter<String>(this, R.layout.menu_item, items);
         menuList.setAdapter(adapt);
         menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -51,11 +52,9 @@ public class SysLvlMenuActivity extends SysLvlActivity {
                     startActivity(new Intent(SysLvlMenuActivity.this, SysLvlHelpActivity.class));
                 } else if (strText.equalsIgnoreCase(getResources().getString(R.string.settings))) {
                     // Launch the Settings Activity
-                	//startActivity(new Intent(SysLvlMenuActivity.this, Preferences.class));
                 	startActivityForResult(new Intent(SysLvlMenuActivity.this, Preferences.class), 0);
                 } else if (strText.equalsIgnoreCase(getResources().getString(R.string.geonotes))) {
-                    // Launch the Settings Activity
-                	//startActivity(new Intent(SysLvlMenuActivity.this, Preferences.class));
+                    // Launch the GeoNotes Activity
                 	startActivityForResult(new Intent(SysLvlMenuActivity.this, GeoNotes.class), 0);
                 	
                 }
