@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="app_name">SysLvl</string>
+    <string name="no_notes">No Notes Yet</string>
+    <string name="menu_insert">Add Note</string>
+    <string name="menu_delete">Delete Note</string>
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+    <string name="confirm">Confirm</string>
+    <string name="edit_note">Edit Note</string>
     <string name="help">Help Screen</string>
     <string name="splash">Splash Screen</string>
     <string name="menu">Main Menu</string>
     <string name="settings">Settings Screen</string>
     <string name="syslvl">System Levels</string>
+    <string name="geonotes">Geo Notes</string>
     <string name="app_version_info">V 3.0</string>
     <string name="menu_item_settings">Settings</string>
     <string name="menu_item_play">Play Game</string>
@@ -16,7 +24,6 @@
     <string name="ongoing_blank">Ongoing\nHigh Mhz:00.0\nLow Mhz:00.0</string>
     <string name="cable_type_prompt">Cable Type</string>
     <string name="device_type_prompt">Device Type</string>
-    <string name="span_blank">~ Span # ~     000 ft of CABLE to DEVICE at HIGH/LOW Mhz\n Readings| Tap: 00.0 / 00.0  |  Out Device: 00.0 / 00.0</string>
     <string-array name="CableList">
         <item>RG-59</item>
         <item>RG-6</item>

@@ -53,6 +53,10 @@ public class SysLvlMenuActivity extends SysLvlActivity {
                     // Launch the Settings Activity
                 	//startActivity(new Intent(SysLvlMenuActivity.this, Preferences.class));
                 	startActivityForResult(new Intent(SysLvlMenuActivity.this, Preferences.class), 0);
+                } else if (strText.equalsIgnoreCase(getResources().getString(R.string.geonotes))) {
+                    // Launch the Settings Activity
+                	//startActivity(new Intent(SysLvlMenuActivity.this, Preferences.class));
+                	startActivityForResult(new Intent(SysLvlMenuActivity.this, GeoNotes.class), 0);
                 	
                 }
             }
