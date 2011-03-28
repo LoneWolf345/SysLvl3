@@ -54,5 +54,6 @@
 
 	<!-- AdMob SDK requires Internet permission -->
   	<uses-permission android:name="android.permission.INTERNET" />
+  	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   
 </manifest> 
