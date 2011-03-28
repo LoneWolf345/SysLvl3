@@ -55,7 +55,8 @@ public class GeoNotes extends ListActivity {
 				createNote();
 			}
 		});
-		
+
+        
 		//Location
         retrieveLocationButton = (Button) findViewById(R.id.retrieve_location_button);
         
@@ -84,16 +85,22 @@ public class GeoNotes extends ListActivity {
 
 		if (location != null) {
 			String message = String.format(
-					"Current Location \n Longitude: %1$s \n Latitude: %2$s",
+					"Longitude: %1$s \n Latitude: %2$s",
 					location.getLongitude(), location.getLatitude()
 			);
 			
-			tvLocation.setText(message);
-			//Toast.makeText(GeoNotes.this, message,
-			//		Toast.LENGTH_LONG).show();
-		}
+			String body = String.format(
+					"Location \n Longitude: %1$s \n Latitude: %2$s \n Speed: %3$s \n Acuracy: %4$s",
+					location.getLongitude(), location.getLatitude(), location.getSpeed(), location.getAccuracy()
+			);
+			
+			tvLocation.setText("Accuracy: "+ String.valueOf(location.getAccuracy()));
+			mDbHelper.createNote(message, body);
+			fillData();
+			
 
-	}   
+		}
+	}
 
 	private class MyLocationListener implements LocationListener {
 

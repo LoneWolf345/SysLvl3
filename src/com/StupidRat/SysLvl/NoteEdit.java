@@ -1,6 +1,5 @@
 package com.StupidRat.SysLvl;
 
-import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;

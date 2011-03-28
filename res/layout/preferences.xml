@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+<PreferenceScreen android:title="SysLvl">
 	<PreferenceCategory android:title="Starting signal Levels">
 		<EditTextPreference
             android:key="HighFreqOutput"
@@ -27,4 +29,14 @@
             android:entries="@array/frequency_list"
             android:dialogTitle="Set a Frequency" />
 	</PreferenceCategory>
+</PreferenceScreen>
+	
+	<PreferenceScreen android:title="GeoNotes">
+		<EditTextPreference
+			android:key="MinAccuracy"
+			android:inputType="numberDecimal|numberSigned"
+			android:defaultValue="16"
+			android:title="Minimum Accuracy"
+			android:dialogTitle="Set the Minimum Accuracy"/>
+	</PreferenceScreen>
 </PreferenceScreen>
