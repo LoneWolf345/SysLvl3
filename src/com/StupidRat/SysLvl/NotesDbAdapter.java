@@ -12,6 +12,11 @@ public class NotesDbAdapter {
 	public static final String KEY_TITLE = "title";
     public static final String KEY_BODY = "body";
     public static final String KEY_ROWID = "_id";
+    public static final String KEY_LAT = "lat";
+    public static final String KEY_LONG = "long";
+    public static final String KEY_STREET = "street";
+    public static final String KEY_STATE = "state";
+    public static final String KEY_ZIP = "zip";
 
     private static final String TAG = "NotesDbAdapter";
     private DatabaseHelper mDbHelper;
@@ -22,11 +27,17 @@ public class NotesDbAdapter {
      */
     private static final String DATABASE_CREATE =
             "create table notes (_id integer primary key autoincrement, "
-                    + "title text not null, body text not null);";
+                    + "title text not null, "
+                    + "body text not null, "
+                    + "lat text, "
+                    + "long text, "
+                    + "street text, "
+                    + "state text, "
+                    + "zip text);";
 
     private static final String DATABASE_NAME = "data";
     private static final String DATABASE_TABLE = "notes";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     private final Context mCtx;
 
@@ -90,10 +101,15 @@ public class NotesDbAdapter {
      * @param body the body of the note
      * @return rowId or -1 if failed
      */
-    public long createNote(String title, String body) {
+    public long createNote(String title, String body, String latitude, String longitude, String street, String state, String zip) {
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_TITLE, title);
         initialValues.put(KEY_BODY, body);
+        initialValues.put(KEY_LAT, latitude);
+        initialValues.put(KEY_LONG, longitude);
+        initialValues.put(KEY_STREET, street);
+        initialValues.put(KEY_STATE, state);
+        initialValues.put(KEY_ZIP, zip);
 
         return mDb.insert(DATABASE_TABLE, null, initialValues);
     }
@@ -117,7 +133,7 @@ public class NotesDbAdapter {
     public Cursor fetchAllNotes() {
 
         return mDb.query(DATABASE_TABLE, new String[] {KEY_ROWID, KEY_TITLE,
-                KEY_BODY}, null, null, null, null, null);
+                KEY_BODY, KEY_LAT, KEY_LONG, KEY_STREET, KEY_STATE, KEY_ZIP}, null, null, null, null, null);
     }
 
     /**
@@ -132,7 +148,7 @@ public class NotesDbAdapter {
         Cursor mCursor =
 
                 mDb.query(true, DATABASE_TABLE, new String[] {KEY_ROWID,
-                        KEY_TITLE, KEY_BODY}, KEY_ROWID + "=" + rowId, null,
+                        KEY_TITLE, KEY_BODY, KEY_LAT, KEY_LONG, KEY_STREET, KEY_STATE, KEY_ZIP}, KEY_ROWID + "=" + rowId, null,
                         null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
@@ -151,10 +167,15 @@ public class NotesDbAdapter {
      * @param body value to set note body to
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateNote(long rowId, String title, String body) {
+    public boolean updateNote(long rowId, String title, String body, String latitude, String longitude, String street, String state, String zip) {
         ContentValues args = new ContentValues();
         args.put(KEY_TITLE, title);
         args.put(KEY_BODY, body);
+        args.put(KEY_LAT, latitude);
+        args.put(KEY_LONG, longitude);
+        args.put(KEY_STREET, street);
+        args.put(KEY_STATE, state);
+        args.put(KEY_ZIP, zip);
 
         return mDb.update(DATABASE_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }

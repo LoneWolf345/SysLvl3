@@ -30,6 +30,7 @@ public class SysLvlMenuActivity extends SysLvlActivity {
         AdView adView = (AdView)findViewById(R.id.ad);
         adView.requestFreshAd();
         
+        
         ListView menuList = (ListView) findViewById(R.id.ListView_Menu);
         String[] items = { getResources().getString(R.string.syslvl),
      		   			   getResources().getString(R.string.geonotes),

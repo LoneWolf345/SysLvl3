@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -84,43 +85,58 @@ public class GeoNotes extends ListActivity {
 		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
 		if (location != null) {
-			String message = String.format(
+			
+			String message = "";
+			String body = "";
+			String latitude = "";
+			String longitude = "";
+			String street = "";
+			String state = "";
+			String zip = "";
+			
+			
+			message = String.format(
 					"Longitude: %1$s \n Latitude: %2$s",
 					location.getLongitude(), location.getLatitude()
 			);
 			
-			String body = String.format(
+			body = String.format(
 					"Location \n Longitude: %1$s \n Latitude: %2$s \n Speed: %3$s \n Acuracy: %4$s",
 					location.getLongitude(), location.getLatitude(), location.getSpeed(), location.getAccuracy()
 			);
 			
 			tvLocation.setText("Accuracy: "+ String.valueOf(location.getAccuracy()));
-			mDbHelper.createNote(message, body);
+			mDbHelper.createNote(message, body, latitude, longitude, street, state, zip);
 			fillData();
+			
 			
 
 		}
+		
 	}
 
 	private class MyLocationListener implements LocationListener {
 
 		public void onLocationChanged(Location location) {
+			TextView tvLocation = (TextView) findViewById(R.id.TextViewLocationAcuracy);
+			
 			String message = String.format(
-					"New Location \n Longitude: %1$s \n Latitude: %2$s",
-					location.getLongitude(), location.getLatitude()
+					"New Location \n Longitude: %1$s \n Latitude: %2$s \n Accuracy: %3$s",
+					location.getLongitude(), location.getLatitude(), location.getAccuracy()
 			);
-			Toast.makeText(GeoNotes.this, message, Toast.LENGTH_LONG).show();
+			tvLocation.setText("Accuracy: "+ String.valueOf(location.getAccuracy()));
+			//Toast.makeText(GeoNotes.this, message, Toast.LENGTH_LONG).show();
 		}
 
 		public void onStatusChanged(String s, int i, Bundle b) {
-			Toast.makeText(GeoNotes.this, "Provider status changed",
-					Toast.LENGTH_LONG).show();
+			//Toast.makeText(GeoNotes.this, "Provider status changed",
+			//		Toast.LENGTH_LONG).show();
 		}
 
 		public void onProviderDisabled(String s) {
-			Toast.makeText(GeoNotes.this,
-					"Provider disabled by the user. GPS turned off",
-					Toast.LENGTH_LONG).show();
+			//Toast.makeText(GeoNotes.this,
+			//		"Provider disabled by the user. GPS turned off",
+			//		Toast.LENGTH_LONG).show();
 		}
 
 		public void onProviderEnabled(String s) {

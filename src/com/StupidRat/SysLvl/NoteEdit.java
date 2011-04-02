@@ -10,6 +10,11 @@ public class NoteEdit extends SysLvlActivity {
 
 	private EditText mTitleText;
     private EditText mBodyText;
+    private EditText mLatText;
+    private EditText mLongText;
+    private EditText mStreetText;
+    private EditText mStateText;
+    private EditText mZipText;
     private Long mRowId;
     private NotesDbAdapter mDbHelper;
 
@@ -23,6 +28,11 @@ public class NoteEdit extends SysLvlActivity {
        
         mTitleText = (EditText) findViewById(R.id.title);
         mBodyText = (EditText) findViewById(R.id.body);
+        mLatText = (EditText) findViewById(R.id.etLat);
+        mLongText = (EditText) findViewById(R.id.etLong);
+        mStreetText = (EditText) findViewById(R.id.etStreet);
+        mStateText = (EditText) findViewById(R.id.etState);
+        mZipText = (EditText) findViewById(R.id.etZip);
       
         Button confirmButton = (Button) findViewById(R.id.confirm);
        
@@ -54,6 +64,16 @@ public class NoteEdit extends SysLvlActivity {
     	            note.getColumnIndexOrThrow(NotesDbAdapter.KEY_TITLE)));
             mBodyText.setText(note.getString(
                     note.getColumnIndexOrThrow(NotesDbAdapter.KEY_BODY)));
+            mLatText.setText(note.getString(
+                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_LAT)));
+            mLongText.setText(note.getString(
+                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_LONG)));
+            mStreetText.setText(note.getString(
+                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_STREET)));
+            mStateText.setText(note.getString(
+                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_STATE)));
+            mZipText.setText(note.getString(
+                    note.getColumnIndexOrThrow(NotesDbAdapter.KEY_ZIP)));
         }
     }
     
@@ -78,14 +98,19 @@ public class NoteEdit extends SysLvlActivity {
     private void saveState() {
         String title = mTitleText.getText().toString();
         String body = mBodyText.getText().toString();
+        String latitude = mLatText.getText().toString();
+        String longitude = mLongText.getText().toString();
+        String street = mStreetText.getText().toString();
+        String state = mStateText.getText().toString();
+        String zip = mZipText.getText().toString();
 
         if (mRowId == null) {
-            long id = mDbHelper.createNote(title, body);
+            long id = mDbHelper.createNote(title, body, latitude, longitude, street, state, zip);
             if (id > 0) {
                 mRowId = id;
             }
         } else {
-            mDbHelper.updateNote(mRowId, title, body);
+            mDbHelper.updateNote(mRowId, title, body, latitude, longitude, street, state, zip);
         }
     }
     

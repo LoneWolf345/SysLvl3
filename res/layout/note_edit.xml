@@ -16,6 +16,59 @@
 			android:layout_height="wrap_content" 
 			android:layout_weight="1"/>
 	</LinearLayout>
+	
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+	
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Latitude"/>
+		<EditText android:id="@+id/etLat" 
+		  	android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:layout_weight="1"/>
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Longitude"/>
+		<EditText android:id="@+id/etLong" 
+		  	android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:layout_weight="1"/>
+	</LinearLayout>
+	
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:text="Street" />
+		<EditText android:id="@+id/etStreet" 
+		  android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:layout_weight="1"/>
+	</LinearLayout>
+	
+	<LinearLayout android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content">
+	
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="State"/>
+		<EditText android:id="@+id/etState" 
+		  	android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:layout_weight="1"/>
+		<TextView android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Zip"/>
+		<EditText android:id="@+id/etZip" 
+		  	android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			android:layout_weight="1"/>
+	</LinearLayout>
 
 	<TextView android:layout_width="wrap_content"
 		android:layout_height="wrap_content" 
