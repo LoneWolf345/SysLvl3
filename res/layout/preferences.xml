@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+<PreferenceCategory android:title="General">
+	<ListPreference
+		android:key="StartUpPref"
+		android:defaultValue="Splash"
+		android:title="Start Up"
+		android:dialogTitle="App starts up to"/>
+		
+		<EditTextPreference
+			android:key="UserName"
+			android:title="UserName"
+			android:dialogTitle="User Name"/>
+		
+		<EditTextPreference
+			android:key="Password"
+			android:title="Password"
+			android:dialogTitle="Password"/>
+
+		<EditTextPreference
+			android:key="SystemID"
+			android:title="System ID"
+			android:dialogTitle="System ID"/>
+
+		<EditTextPreference
+			android:key="SystemPIN"
+			android:title="SystemPIN"
+			android:dialogTitle="System PIN"/>
+							
+</PreferenceCategory>
+
 <PreferenceScreen android:title="SysLvl">
 	<PreferenceCategory android:title="Starting signal Levels">
 		<EditTextPreference
@@ -38,5 +67,24 @@
 			android:defaultValue="16"
 			android:title="Minimum Accuracy"
 			android:dialogTitle="Set the Minimum Accuracy"/>
+	
+		
 	</PreferenceScreen>
+	
+	<PreferenceScreen android:title="Equipment">
+		
+	</PreferenceScreen>
+	
+	<PreferenceScreen android:title="Job Log">
+		
+	</PreferenceScreen>	
+
+	<PreferenceScreen android:title="Find a Tech">
+		<EditTextPreference
+			android:key="FaTSearchDistance"
+			android:inputType="numberDecimal|numberSigned"
+			android:defaultValue="1"
+			android:title="Search Distance"
+			android:dialogTitle="How far should techs be?"/>
+	</PreferenceScreen>	
 </PreferenceScreen>

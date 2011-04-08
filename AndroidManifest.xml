@@ -7,8 +7,9 @@
     	android:label="@string/app_name" android:debuggable="true">
     	
         <activity 
-        	android:name=".SysLvlSplashActivity" 
-        	android:label="@string/app_name">
+        	android:name="SplashScreen" 
+        	android:label="@string/app_name"
+        	android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -16,13 +17,13 @@
         </activity>
         
         <activity
-            android:name="SysLvlMainActivity"></activity>
+            android:name="SysLvlScreen"></activity>
         <activity
             android:name="SysLvlSettingsActivity"></activity>
         <activity
-            android:name="SysLvlHelpActivity"></activity>
+            android:name="HelpScreen"></activity>
         <activity
-            android:name="SysLvlMenuActivity"></activity>
+            android:name="MenuScreen"></activity>
         <activity 
         	android:name=".NewQA"></activity>
         <activity
@@ -30,9 +31,11 @@
         <activity
         	android:name=".Preferences"></activity>
         <activity
-        	android:name="GeoNotes"></activity>
+        	android:name="GeoNotesScreen"></activity>
         <activity 
-        	android:name="NoteEdit"/>
+        	android:name="GeoNoteEdit"/>
+        <activity 
+        	android:name="BarcodeScanner"/>
 
 	<!-- The application's publisher ID assigned by AdMob -->
 	<meta-data android:value="a14d251ae6865db" android:name="ADMOB_PUBLISHER_ID" />

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent" android:layout_height="match_parent"
+	android:orientation="vertical">
+	<TextView android:id="@+id/textView2"
+		android:layout_marginRight="10dp" android:layout_width="wrap_content"
+		android:text="Enter the Account Number:" android:layout_marginLeft="10dp"
+		android:layout_height="wrap_content" android:layout_marginTop="25dp" />
+	<EditText android:text="" android:layout_marginRight="10dp"
+		android:id="@+id/etAccount" android:layout_width="match_parent" android:inputType="numberSigned"
+		android:layout_marginLeft="10dp" android:layout_height="wrap_content" />
+	<TextView android:id="@+id/textView1" android:layout_width="match_parent"
+		android:text="Scan the barcode of the equipment:"
+		android:layout_height="wrap_content" android:layout_marginLeft="10dp"
+		android:layout_marginRight="10dp" android:layout_marginTop="25dp" />
+	<Button android:text="Barcode Scanner" android:id="@+id/scannerBtn"
+		android:layout_width="match_parent" android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp" android:layout_marginRight="10dp" />
+	<EditText android:id="@+id/etBarcode" android:layout_width="match_parent"
+		android:text="" android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp" android:layout_marginRight="10dp" />
+	<Button android:text="Generate Email" android:id="@+id/genEmail"
+		android:layout_height="wrap_content" android:layout_width="match_parent"
+		android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
+		android:layout_marginTop="25dp" />
+</LinearLayout>

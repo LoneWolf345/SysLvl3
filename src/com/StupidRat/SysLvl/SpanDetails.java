@@ -14,11 +14,11 @@ import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
-import com.StupidRat.SysLvl.DatabaseAdapter;
+import com.StupidRat.SysLvl.SysLvlDbAdapter;
 
 public class SpanDetails extends Activity {
 
-	private DatabaseAdapter mDbHelper;
+	private SysLvlDbAdapter mDbHelper;
 	private Long mRowId;
 	private Long mPosition;
 	
@@ -28,7 +28,7 @@ public class SpanDetails extends Activity {
 		super.onCreate(bundle);
 		
 		
-		mDbHelper = new DatabaseAdapter(this);
+		mDbHelper = new SysLvlDbAdapter(this);
 		mDbHelper.open();
 		
 		setContentView(R.layout.span_details);
@@ -41,12 +41,12 @@ public class SpanDetails extends Activity {
 		mRowId = null;
 		mPosition = null;
 		Bundle extras = getIntent().getExtras();
-		mRowId = (bundle == null) ? null : (Long) bundle.getSerializable(DatabaseAdapter.KEY_ROWID);
-		mPosition = (bundle == null) ? null : (Long) bundle.getSerializable(DatabaseAdapter.KEY_POSITION);
+		mRowId = (bundle == null) ? null : (Long) bundle.getSerializable(SysLvlDbAdapter.KEY_ROWID);
+		mPosition = (bundle == null) ? null : (Long) bundle.getSerializable(SysLvlDbAdapter.KEY_POSITION);
 
 		if (extras != null){
-			mRowId = extras.getLong(DatabaseAdapter.KEY_ROWID);
-			mPosition = extras.getLong(DatabaseAdapter.KEY_POSITION);
+			mRowId = extras.getLong(SysLvlDbAdapter.KEY_ROWID);
+			mPosition = extras.getLong(SysLvlDbAdapter.KEY_POSITION);
 		}
 		
 		Log.v(SysLvlActivity.DEBUG_TAG, "mRowId: "+mRowId);
@@ -141,7 +141,7 @@ public class SpanDetails extends Activity {
 		Log.v(SysLvlActivity.DEBUG_TAG, "Try and set the cable spinner");
 		try{
 			Cursor cable = mDbHelper.fetchSingleSpan(mRowId);
-			String cableName = cable.getString(cable.getColumnIndexOrThrow(DatabaseAdapter.KEY_CABLENAME));
+			String cableName = cable.getString(cable.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_CABLENAME));
 			Log.v(SysLvlActivity.DEBUG_TAG, "cableName: "+cableName);
 			
 			for (int i=0; i<mSpinnerCableType.getCount(); i++){
@@ -170,7 +170,7 @@ public class SpanDetails extends Activity {
 		Log.v(SysLvlActivity.DEBUG_TAG, "Try and set the device spinner");
 		try{
 			Cursor device = mDbHelper.fetchSingleSpan(mRowId);
-			String deviceName = device.getString(device.getColumnIndexOrThrow(DatabaseAdapter.KEY_DEVICENAME));
+			String deviceName = device.getString(device.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_DEVICENAME));
 			for (int i=0; i<mSpinnerDevice.getCount(); i++){
 				String s = (String) mSpinnerDevice.getItemAtPosition(i);
 				Log.e(null, s + " " + deviceName);
@@ -192,14 +192,14 @@ public class SpanDetails extends Activity {
 				
 
 				//Set cableLength EditText
-				mEditLength.setText(span.getString(span.getColumnIndexOrThrow(DatabaseAdapter.KEY_DISTANCE)));
+				mEditLength.setText(span.getString(span.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_DISTANCE)));
 				
 				
 				//Set signal level TextViews
-				mTapHighDetail.setText(span.getString(span.getColumnIndexOrThrow(DatabaseAdapter.KEY_TAPHIGH)));
-				mTapLowDetail.setText(span.getString(span.getColumnIndexOrThrow(DatabaseAdapter.KEY_TAPLOW)));
-				mHotHighDetail.setText(span.getString(span.getColumnIndexOrThrow(DatabaseAdapter.KEY_HOTHIGH)));
-				mHotLowDetail.setText(span.getString(span.getColumnIndexOrThrow(DatabaseAdapter.KEY_HOTLOW)));
+				mTapHighDetail.setText(span.getString(span.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_TAPHIGH)));
+				mTapLowDetail.setText(span.getString(span.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_TAPLOW)));
+				mHotHighDetail.setText(span.getString(span.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_HOTHIGH)));
+				mHotLowDetail.setText(span.getString(span.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_HOTLOW)));
 				
 				
 	    	}catch(SQLException e){
@@ -217,7 +217,7 @@ public class SpanDetails extends Activity {
 	protected void onSaveInstanceState(Bundle outState){
 		super.onSaveInstanceState(outState);
 		saveState();
-		outState.putSerializable(DatabaseAdapter.KEY_ROWID, mRowId);
+		outState.putSerializable(SysLvlDbAdapter.KEY_ROWID, mRowId);
 	}
 	
 	@Override

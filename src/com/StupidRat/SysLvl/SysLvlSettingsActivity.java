@@ -25,7 +25,7 @@ public class SysLvlSettingsActivity extends SysLvlActivity {
         Button resetButton = (Button) findViewById(R.id.ResetButton);
 		resetButton.setOnClickListener(new View.OnClickListener(){
 			public void onClick(View view) {
-				DatabaseHelper dbHelper = new DatabaseHelper(SysLvlSettingsActivity.this);
+				SysLvlDbHelper dbHelper = new SysLvlDbHelper(SysLvlSettingsActivity.this);
 				dbHelper.onCreate(dbHelper.getWritableDatabase());
 			}
 		});
