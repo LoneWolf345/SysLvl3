@@ -1,13 +1,10 @@
 package com.StupidRat.SysLvl;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,16 +12,16 @@ import android.widget.EditText;
 public class BarcodeScanner extends Activity {
 	
 	String contents = "";
+	private Context context;
+	
+	
 	
 	public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.barcodetest);
+        setContentView(R.layout.barcode_scanner);
         
     	Button btnStartScanner, btnSendEmail;
-    	EditText etAccount, etBarcode;
-    	
-    	etBarcode = (EditText) findViewById(R.id.etBarcode);
-    	etAccount = (EditText) findViewById(R.id.etAccount);
+
     	btnStartScanner = (Button) findViewById(R.id.scannerBtn);
     	btnSendEmail = (Button) findViewById(R.id.genEmail);
       
@@ -38,12 +35,21 @@ public class BarcodeScanner extends Activity {
         
         btnSendEmail.setOnClickListener(new View.OnClickListener(){
   			public void onClick(View view) {
+  				
+  			//Get Tech ID String, Action String, Account Prefix, Destination Email from user preferences
+  				SharedPreferences prefs = getSharedPreferences(SysLvlActivity.SYSLVL_PREFS, 0);
+  				String TechID = prefs.getString("equipTechId", "Tech 36");
+  				String ActionString = prefs.getString("equipActionString", "MTA to Provision");
+  				String AccountPrefix = prefs.getString("equipAccountPrefix", "23425");
+  				String DestinationEmail = prefs.getString("equipDestinationEmail", "MyDispatch@MyBusiness.com");
+  				
+  				
   				EditText etBarcode = (EditText) findViewById(R.id.etBarcode);
   				EditText etAccount = (EditText) findViewById(R.id.etAccount);
   				final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
   				emailIntent.setType("plain/text");
-  				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{"FargoDispatch@cableone.biz"});
-  				emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "TECH REQUESTS MTA PROVISIONING");
+  				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{DestinationEmail});
+  				emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, TechID+" "+ActionString+" "+AccountPrefix+etAccount.getText().toString());
   				emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Account: "+etAccount.getText().toString()+ "\nSerial: "+etBarcode.getText().toString());
   				
   				startActivity(Intent.createChooser(emailIntent, "Send mail..."));

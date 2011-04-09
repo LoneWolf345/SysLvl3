@@ -72,6 +72,26 @@
 	</PreferenceScreen>
 	
 	<PreferenceScreen android:title="Equipment">
+		<EditTextPreference
+			android:key="equipTechId"
+			android:defaultValue="Tech ##"
+			android:title="Tech ID String"
+			android:dialogTitle="Tech ID String ex. Tech 36"/>
+		<EditTextPreference
+			android:key="equipActionString"
+			android:defaultValue="MTA to Provision"
+			android:title="Action String"
+			android:dialogTitle="Enter an Action String"/>
+		<EditTextPreference
+			android:key="equipAccountPrefix"
+			android:defaultValue="23425"
+			android:title="AccountPrefix"
+			android:dialogTitle="Enter an Account Prefix if any"/>
+		<EditTextPreference
+			android:key="equipDestinationEmail"
+			android:defaultValue="MyDispatch@MyBusiness.com"
+			android:title="Destination Email"
+			android:dialogTitle="Enter an Email Address to send to"/>		
 		
 	</PreferenceScreen>
 	

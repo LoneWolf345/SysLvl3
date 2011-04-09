@@ -2,11 +2,8 @@ package com.StupidRat.SysLvl;
 
 import java.math.BigDecimal;
 
-import com.StupidRat.SysLvl.SysLvlSettingsActivity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -425,21 +422,21 @@ public class SysLvlDbAdapter {
 		return loss;
 	}
 	
-	private ContentValues createContentValues(int distance, String cableName,
-			String deviceName, double tapHigh, double tapLow, double hotHigh,
-			double hotLow) {
-
-		ContentValues values = new ContentValues();
-		values.put("distance", distance);
-		values.put("cableName", cableName);
-		values.put("deviceName", deviceName);
-		values.put("tapHigh", tapHigh);
-		values.put("tapLow", tapLow);
-		values.put("hotHigh", hotHigh);
-		values.put("hotLow", hotLow);
-		return values;
-
-	}
+//	private ContentValues createContentValues(int distance, String cableName,
+//			String deviceName, double tapHigh, double tapLow, double hotHigh,
+//			double hotLow) {
+//
+//		ContentValues values = new ContentValues();
+//		values.put("distance", distance);
+//		values.put("cableName", cableName);
+//		values.put("deviceName", deviceName);
+//		values.put("tapHigh", tapHigh);
+//		values.put("tapLow", tapLow);
+//		values.put("hotHigh", hotHigh);
+//		values.put("hotLow", hotLow);
+//		return values;
+//
+//	}
 
 	public static double round(double unrounded, int precision, int roundingMode)
 	{

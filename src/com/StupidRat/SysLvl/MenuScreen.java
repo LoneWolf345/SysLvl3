@@ -44,7 +44,7 @@ public class MenuScreen extends LauncherActivity {
 			case 2:
 				launcherButton.setText("GeoNotes");
 				launcherButton.setIcon(R.drawable.globe);
-				launcherButton.setEnabled(true);
+				launcherButton.setEnabled(false);
 				break;
 			case 3:
 				launcherButton.setText("Equipment");

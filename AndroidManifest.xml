@@ -17,25 +17,26 @@
         </activity>
         
         <activity
-            android:name="SysLvlScreen"></activity>
+            android:name="SysLvlScreen"/>
         <activity
-            android:name="SysLvlSettingsActivity"></activity>
+            android:name="SysLvlSettingsActivity"/>
         <activity
-            android:name="HelpScreen"></activity>
+            android:name="HelpScreen"/>
         <activity
-            android:name="MenuScreen"></activity>
+            android:name="MenuScreen"/>
         <activity 
-        	android:name=".NewQA"></activity>
+        	android:name=".NewQA"/>
         <activity
-        	android:name="SpanDetails"></activity>
+        	android:name="SpanDetails"/>
         <activity
-        	android:name=".Preferences"></activity>
+        	android:name=".Preferences"/>
         <activity
-        	android:name="GeoNotesScreen"></activity>
+        	android:name="GeoNotesScreen"/>
         <activity 
         	android:name="GeoNoteEdit"/>
         <activity 
-        	android:name="BarcodeScanner"/>
+        	android:name="BarcodeScanner"
+        	android:screenOrientation="portrait"/>
 
 	<!-- The application's publisher ID assigned by AdMob -->
 	<meta-data android:value="a14d251ae6865db" android:name="ADMOB_PUBLISHER_ID" />
