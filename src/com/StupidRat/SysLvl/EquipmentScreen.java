@@ -12,18 +12,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.PopupWindow.OnDismissListener;
 
-public class SysLvlScreen extends SysLvlActivity {
+public class EquipmentScreen extends SysLvlActivity {
 	
 	private SysLvlDbAdapter dbHelper;
-	private static final int ACTIVITY_CREATE = 0;
+	//private static final int ACTIVITY_CREATE = 0;
 	//private static final int ACTIVITY_EDIT = 1;
 	//private static final int DELETE_ID = Menu.FIRST + 1;
 	
@@ -33,8 +31,8 @@ public class SysLvlScreen extends SysLvlActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.syslvl);
-        fillData();
+        setContentView(R.layout.equipment);
+        //fillData();
                 
     }
     
@@ -44,76 +42,72 @@ public class SysLvlScreen extends SysLvlActivity {
     }
 
     public void createSpan(){
-    	dbHelper.createSpan(100, "P3 .625", "26v2p", 0, 0, 0, 0);
+    	//dbHelper.createSpan(100, "P3 .625", "26v2p", 0, 0, 0, 0);
     	
-    	fillData();
-    	//Intent i = new Intent(this, SpanDetails.class);
-    	//startActivityForResult(i, ACTIVITY_CREATE);
+    	//fillData();
     }
     
     protected void onActivityResult(int requestCode, int resultCode, Intent intent){
     	super.onActivityResult(requestCode, resultCode, intent);
     	
-    	fillData();
+    	//fillData();
     }
     
     public void fillData(){
     	
     	
     	
-    	final SharedPreferences prefs = getSharedPreferences(SYSLVL_PREFS , MODE_PRIVATE);
-    	TextView TextViewAmpOut = (TextView) findViewById(R.id.TextViewAmpOut);
+    	//final SharedPreferences prefs = getSharedPreferences(SYSLVL_PREFS , MODE_PRIVATE);
+    	//TextView TextViewAmpOut = (TextView) findViewById(R.id.TextViewAmpOut);
     	
-    	int AmpOutHigh = Integer.parseInt(prefs.getString("HighFreqOutput", "45"));
-    	int AmpOutLow = Integer.parseInt(prefs.getString("LowFreqOutput", "36"));
+    	//int AmpOutHigh = Integer.parseInt(prefs.getString("HighFreqOutput", "45"));
+    	//int AmpOutLow = Integer.parseInt(prefs.getString("LowFreqOutput", "36"));
     	//int AmpOutLow = prefs.getInt("LowFreqOutput", 0);
-    	String AmpOutText = "Starting "+AmpOutHigh+"/"+AmpOutLow;
-    	TextViewAmpOut.setText(AmpOutText);
+    	//String AmpOutText = "Starting "+AmpOutHigh+"/"+AmpOutLow;
+    	//TextViewAmpOut.setText(AmpOutText);
     	
-    	Log.v(SysLvlActivity.DEBUG_TAG, "Begin fillData");
-    	ListView mList = (ListView) findViewById(R.id.l_list);
-    	Button mButtonAddSpan = (Button) findViewById(R.id.ButtonAddSpan);
-    	//Button mButtonCalculate	= (Button) findViewById(R.id.ButtonCalculate);
+    	//Log.v(SysLvlActivity.DEBUG_TAG, "Begin fillData");
+    	ListView mList = (ListView) findViewById(R.id.equipment_l_list);
     	
     	Log.v(SysLvlActivity.DEBUG_TAG, "Set new QuickActionAdapter");
     	NewQAAdapter adapter = new NewQAAdapter(this);
         
-    	Log.v(SysLvlActivity.DEBUG_TAG, "open database");
-    	dbHelper = new SysLvlDbAdapter(this);
-        dbHelper.open();
-        dbHelper.updateAllSpanAttenuation();
+    	//Log.v(SysLvlActivity.DEBUG_TAG, "open database");
+    	//dbHelper = new SysLvlDbAdapter(this);
+        //dbHelper.open();
+        //dbHelper.updateAllSpanAttenuation();
         /**
          * Fetch all spans to populate the ListView
          */
-        Log.v(SysLvlActivity.DEBUG_TAG, "Fetch all spans to populate the ListView");
-        ArrayList<String> result = new ArrayList<String>();
-        Cursor c = dbHelper.fetchAllSpans();
-        startManagingCursor(c);
-        if (c != null){
-        	if (c.moveToFirst()){
-        		do {
-        			int position = c.getInt(c.getColumnIndex("position"));
-        			int distance = c.getInt(c.getColumnIndex("distance"));
-        			String cableName = c.getString(c.getColumnIndex("cableName"));
-        			String deviceName = c.getString(c.getColumnIndex("deviceName"));
-        			double tapHigh = c.getDouble(c.getColumnIndex("tapHigh"));
-        			double tapLow = c.getDouble(c.getColumnIndex("tapLow"));
-        			double hotHigh = c.getDouble(c.getColumnIndex("hotHigh"));
-        			double hotLow = c.getDouble(c.getColumnIndex("hotLow"));
-        			result.add("" +distance+"ft of "+cableName+" to "+deviceName+"\n Tap: "+tapHigh+"/"+tapLow+" | Out: "+hotHigh+"/"+hotLow);
-        			Log.i(null,position +" ,"+ cableName +" ,"+ deviceName);
-        		}while (c.moveToNext());
-        	}
-        }
+        //Log.v(SysLvlActivity.DEBUG_TAG, "Fetch all spans to populate the ListView");
+//        ArrayList<String> result = new ArrayList<String>();
+//        Cursor c = dbHelper.fetchAllSpans();
+//        startManagingCursor(c);
+//        if (c != null){
+//        	if (c.moveToFirst()){
+//        		do {
+//        			int position = c.getInt(c.getColumnIndex("position"));
+//        			int distance = c.getInt(c.getColumnIndex("distance"));
+//        			String cableName = c.getString(c.getColumnIndex("cableName"));
+//        			String deviceName = c.getString(c.getColumnIndex("deviceName"));
+//        			double tapHigh = c.getDouble(c.getColumnIndex("tapHigh"));
+//        			double tapLow = c.getDouble(c.getColumnIndex("tapLow"));
+//        			double hotHigh = c.getDouble(c.getColumnIndex("hotHigh"));
+//        			double hotLow = c.getDouble(c.getColumnIndex("hotLow"));
+//        			result.add("" +distance+"ft of "+cableName+" to "+deviceName+"\n Tap: "+tapHigh+"/"+tapLow+" | Out: "+hotHigh+"/"+hotLow);
+//        			Log.i(null,position +" ,"+ cableName +" ,"+ deviceName);
+//        		}while (c.moveToNext());
+//        	}
+//        }
         //convert result to String array
-        Log.v(SysLvlActivity.DEBUG_TAG, "convert result to String array");
-        String[] data = new String[result.size()];
-        result.toArray(data);
+//        Log.v(SysLvlActivity.DEBUG_TAG, "convert result to String array");
+//        String[] data = new String[result.size()];
+//        result.toArray(data);
         
         Log.v(SysLvlActivity.DEBUG_TAG, "load data to adapter");
-        adapter.setData(data);
+//        adapter.setData(data);
         Log.v(SysLvlActivity.DEBUG_TAG, "load adapter to List");
-        mList.setAdapter(adapter);
+//       mList.setAdapter(adapter);
         
         
         /**
@@ -125,15 +119,10 @@ public class SysLvlScreen extends SysLvlActivity {
 		detailsAction.setTitle("Details");
 		detailsAction.setIcon(getResources().getDrawable(R.drawable.information));
 
-		final ActionItem upAction = new ActionItem();
+		final ActionItem issueAction = new ActionItem();
 		
-		upAction.setTitle("Up");
-		upAction.setIcon(getResources().getDrawable(R.drawable.up));
-		
-		final ActionItem downAction = new ActionItem();
-		
-		downAction.setTitle("Down");
-		downAction.setIcon(getResources().getDrawable(R.drawable.down));
+		issueAction.setTitle("Issue");
+		issueAction.setIcon(getResources().getDrawable(R.drawable.down));
 		
 		
 		final ActionItem deleteAction = new ActionItem();
@@ -152,7 +141,7 @@ public class SysLvlScreen extends SysLvlActivity {
 				final long span_id = dbHelper.fetchSingleRowId(row);
 				
 				Log.v(SysLvlActivity.DEBUG_TAG, "Span clicked at position:"+row);
-				//Toast.makeText(SysLvlMainActivity.this, "Span clicked at position:"+row, Toast.LENGTH_SHORT).show();
+				
 				
 				final QuickAction mQuickAction 	= new QuickAction(view);
 				final ImageView mMoreImage 		= (ImageView) view.findViewById(R.id.i_more);
@@ -165,7 +154,7 @@ public class SysLvlScreen extends SysLvlActivity {
 						
 				    	try{
 						Log.v(SysLvlActivity.DEBUG_TAG, "Setting up intent for SpanDetails on row "+row);
-						Intent i = new Intent(SysLvlScreen.this, SpanDetails.class);
+						Intent i = new Intent(EquipmentScreen.this, SpanDetails.class);
 						
 						Log.v(SysLvlActivity.DEBUG_TAG, "Set extras.");
 						Log.v(SysLvlActivity.DEBUG_TAG, "mRowId: "+span_id);
@@ -183,29 +172,8 @@ public class SysLvlScreen extends SysLvlActivity {
 					}
 				});
 
-				upAction.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						Log.v(SysLvlActivity.DEBUG_TAG, "Up button press for span "+row);
-						
-						try{
-							Log.v(SysLvlActivity.DEBUG_TAG, "Initiate MoveSpanUp");
-							dbHelper.moveSpanUp(row);
-							//dbHelper.updateAllSpanAttenuation();
-							fillData();
-						}catch(SQLException e){
-							Log.e(SysLvlActivity.DEBUG_TAG, "up action failed");
-							Log.e(SysLvlActivity.DEBUG_TAG, e.toString());
-						}
-				    	
-				    	
-						
-						//Toast.makeText(SysLvlMainActivity.this, "Move span from "+row+" to "+(row - 1), Toast.LENGTH_SHORT).show();
-						mQuickAction.dismiss();
-					}
-				});
 				
-				downAction.setOnClickListener(new OnClickListener() {
+				issueAction.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
 						Log.v(SysLvlActivity.DEBUG_TAG, "Down button press for span "+row);
@@ -215,11 +183,10 @@ public class SysLvlScreen extends SysLvlActivity {
 						//dbHelper.updateAllSpanAttenuation();
 						fillData();
 						}catch(SQLException e){
-							Log.e(SysLvlActivity.DEBUG_TAG, "down action failed");
+							Log.e(SysLvlActivity.DEBUG_TAG, "issue action failed");
 							Log.e(SysLvlActivity.DEBUG_TAG, e.toString());
 						}
 						
-						//Toast.makeText(SysLvlMainActivity.this, "Move span from "+(row)+" to "+(row + 1), Toast.LENGTH_SHORT).show();
 						mQuickAction.dismiss();
 					}
 				});
@@ -228,9 +195,7 @@ public class SysLvlScreen extends SysLvlActivity {
 					@Override
 					public void onClick(View v) {
 						Log.v(SysLvlActivity.DEBUG_TAG, "Delete button press for span "+row);
-						//Toast.makeText(SysLvlMainActivity.this, "Delete span: "+row, Toast.LENGTH_SHORT).show();
 				    try{	
-				    	
 						dbHelper.deleteSingleSpan(span_id);
 						dbHelper.updateAllSpanPositions();
 						fillData();
@@ -243,8 +208,7 @@ public class SysLvlScreen extends SysLvlActivity {
 				});
 				
 				mQuickAction.addActionItem(detailsAction);
-				mQuickAction.addActionItem(upAction);
-				mQuickAction.addActionItem(downAction);
+				mQuickAction.addActionItem(issueAction);
 				mQuickAction.addActionItem(deleteAction);
 				
 				mQuickAction.setAnimStyle(QuickAction.ANIM_AUTO);
@@ -257,16 +221,6 @@ public class SysLvlScreen extends SysLvlActivity {
 				});
 				
 				mQuickAction.show();
-			}
-		});
-		
-					
-		mButtonAddSpan.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View view) {
-				//DatabaseHelper dbHelper = new DatabaseHelper(SysLvlMainActivity.this);
-				//dbHelper.onCreate(dbHelper.getWritableDatabase());
-				//fillData();
-				createSpan();
 			}
 		});
     }

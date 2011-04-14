@@ -82,7 +82,7 @@ public class MenuScreen extends LauncherActivity {
 				startActivityForResult(new Intent(MenuScreen.this, GeoNotesScreen.class), 0);
 				break;
 			case 3: //Equipment
-				startActivityForResult(new Intent(MenuScreen.this, BarcodeScanner.class), 0);
+				startActivityForResult(new Intent(MenuScreen.this, EquipmentScreen.class), 0);
 				break;
 			case 4: //Find a Tech
 				
@@ -97,11 +97,6 @@ public class MenuScreen extends LauncherActivity {
 		
 	}
 
-	@Override
-	public boolean onLongClick(LauncherActivity.LauncherButton launcherButton) {
-		//launcherButton.setText("Long Click!");
-		return true;
-	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);

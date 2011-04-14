@@ -50,7 +50,7 @@ public class BarcodeScanner extends Activity {
   				emailIntent.setType("plain/text");
   				emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{DestinationEmail});
   				emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, TechID+" "+ActionString+" "+AccountPrefix+etAccount.getText().toString());
-  				emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Account: "+etAccount.getText().toString()+ "\nSerial: "+etBarcode.getText().toString());
+  				emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Account:\n"+AccountPrefix+etAccount.getText().toString()+ "\n\nSerial:\n"+etBarcode.getText().toString());
   				
   				startActivity(Intent.createChooser(emailIntent, "Send mail..."));
   			}

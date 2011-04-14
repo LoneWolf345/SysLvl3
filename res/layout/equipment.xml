@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:myapp="http://schemas.android.com/apk/res/com.StupidRat.SysLvl"
+	android:orientation="vertical" android:layout_width="wrap_content"
+	android:layout_height="fill_parent">
+
+	<RelativeLayout android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+		<Button android:id="@+id/equipmentSearchButton"
+			android:layout_height="40dp"
+			android:layout_alignParentRight="true" android:text="Search" android:layout_width="75dip"/>
+		<Button android:id="@+id/equipmentBatch" android:text="Batch" android:layout_toLeftOf="@+id/equipmentSearchButton"
+			android:layout_height="wrap_content" android:layout_alignTop="@+id/equipmentSearchButton"
+			android:layout_alignBottom="@+id/equipmentSearchButton" android:layout_width="75dip"/>
+		<Button android:id="@+id/equipmentAdd" 
+			android:text="Add"
+			android:layout_toLeftOf="@+id/equipmentBatch" android:layout_height="wrap_content"
+			android:layout_alignTop="@+id/equipmentBatch"
+			android:layout_alignBottom="@+id/equipmentBatch" android:layout_width="75dip"/>
+
+	</RelativeLayout>
+
+	<RelativeLayout android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+
+		<com.admob.android.ads.AdView android:id="@+id/EquipmentAd"
+			android:layout_width="fill_parent" android:layout_height="wrap_content"
+			android:layout_alignParentTop="True" myapp:backgroundColor="#000000"
+			myapp:primaryTextColor="#FFFFFF" myapp:secondaryTextColor="#CCCCCC" />
+
+	</RelativeLayout>
+	<RelativeLayout android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+
+		<ListView android:id="@+id/equipment_l_list"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_marginTop="10dp" android:layout_alignParentTop="true" />
+
+	</RelativeLayout>
+
+</LinearLayout>
