@@ -28,8 +28,9 @@ public class GeoNotesScreen extends ListActivity {
 	private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
 	private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
 	
-	protected LocationManager locationManager;
-	protected Button retrieveLocationButton;
+        protected LocationManager locationManager;
+        protected Button retrieveLocationButton;
+        private LocationListener locationListener;
 	
     private static final int ACTIVITY_CREATE=0;
     private static final int ACTIVITY_EDIT=1;
@@ -62,20 +63,44 @@ public class GeoNotesScreen extends ListActivity {
         retrieveLocationButton = (Button) findViewById(R.id.retrieve_location_button);
         
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new MyLocationListener();
         
-        locationManager.requestLocationUpdates(
-        		LocationManager.GPS_PROVIDER, 
-        		MINIMUM_TIME_BETWEEN_UPDATES, 
-        		MINIMUM_DISTANCE_CHANGE_FOR_UPDATES,
-        		new MyLocationListener()
-        );
-        
-		retrieveLocationButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showCurrentLocation();
-			}
-		}); 
+                retrieveLocationButton.setOnClickListener(new OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                                showCurrentLocation();
+                        }
+                });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (locationManager != null && locationListener != null) {
+                locationManager.requestLocationUpdates(
+                                LocationManager.GPS_PROVIDER,
+                                MINIMUM_TIME_BETWEEN_UPDATES,
+                                MINIMUM_DISTANCE_CHANGE_FOR_UPDATES,
+                                locationListener
+                );
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if (locationManager != null && locationListener != null) {
+                locationManager.removeUpdates(locationListener);
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (locationManager != null && locationListener != null) {
+                locationManager.removeUpdates(locationListener);
+        }
+        super.onDestroy();
     }
     
 	protected void showCurrentLocation() {
