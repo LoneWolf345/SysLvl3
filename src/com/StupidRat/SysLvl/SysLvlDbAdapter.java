@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
@@ -67,12 +68,9 @@ public class SysLvlDbAdapter {
 	/**
 	 * Fetch Functions
 	 */
-	public long fetchSpanCount() {
-		Cursor mCursor = fetchAllSpans();
-		long result = mCursor.getCount();
-
-		return result;
-	}
+        public long fetchSpanCount() {
+                return DatabaseUtils.queryNumEntries(database, SPANS_TABLE, KEY_POSITION + " >= 0");
+        }
 	
 	public Cursor fetchAllSpans() {
 		Log.v(SysLvlActivity.DEBUG_TAG, "fetchAllSpans");
@@ -221,8 +219,9 @@ public class SysLvlDbAdapter {
 
 		if (c != null) {
 			c.moveToFirst();
-			Log.v(SysLvlActivity.DEBUG_TAG, "Begin refreshSpanPositions loop.");
-			for (int i = 0; i < fetchSpanCount(); i++) {
+                        long spanCount = fetchSpanCount();
+                        Log.v(SysLvlActivity.DEBUG_TAG, "Begin refreshSpanPositions loop.");
+                        for (int i = 0; i < spanCount; i++) {
 				long rowId = c.getLong(c
 						.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_ROWID));
 				String sql = "UPDATE " + SPANS_TABLE + " SET " + KEY_POSITION
@@ -265,10 +264,11 @@ public class SysLvlDbAdapter {
 		//and saves the new levels.
 		if (s != null) {
 						
-			Log.v(SysLvlActivity.DEBUG_TAG,"Begin updateAllSpanAttenuation loop.");
+                        Log.v(SysLvlActivity.DEBUG_TAG,"Begin updateAllSpanAttenuation loop.");
 
-			s.moveToFirst();
-			for (int i = 0; i < fetchSpanCount(); i++) {
+                        s.moveToFirst();
+                        long spanCount = fetchSpanCount();
+                        for (int i = 0; i < spanCount; i++) {
 				
 				Log.v(SysLvlActivity.DEBUG_TAG,"\n------------ Span "+i+" ------------");
 				Log.v(SysLvlActivity.DEBUG_TAG,"Get data from span");
