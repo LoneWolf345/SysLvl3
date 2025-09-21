@@ -258,8 +258,8 @@ public class SysLvlDbAdapter {
 		
 		//Get starting signal levels from user preferences
 		SharedPreferences prefs = context.getSharedPreferences(SysLvlActivity.SYSLVL_PREFS, 0);
-		incomingSignalHigh = Integer.parseInt(prefs.getString("HighFreqOutput", "45"));
-		incomingSignalLow = Integer.parseInt(prefs.getString("LowFreqOutput", "36"));
+                incomingSignalHigh = prefs.getInt("HighFreqOutput", 45);
+                incomingSignalLow = prefs.getInt("LowFreqOutput", 36);
 		
 		//Begin a loop that loads levels from a cursor, performs the calculations
 		//and saves the new levels.

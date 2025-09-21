@@ -64,8 +64,8 @@ public class SysLvlScreen extends SysLvlActivity {
     	final SharedPreferences prefs = getSharedPreferences(SYSLVL_PREFS , MODE_PRIVATE);
     	TextView TextViewAmpOut = (TextView) findViewById(R.id.TextViewAmpOut);
     	
-    	int AmpOutHigh = Integer.parseInt(prefs.getString("HighFreqOutput", "45"));
-    	int AmpOutLow = Integer.parseInt(prefs.getString("LowFreqOutput", "36"));
+        int AmpOutHigh = prefs.getInt("HighFreqOutput", 45);
+        int AmpOutLow = prefs.getInt("LowFreqOutput", 36);
     	//int AmpOutLow = prefs.getInt("LowFreqOutput", 0);
     	String AmpOutText = "Starting "+AmpOutHigh+"/"+AmpOutLow;
     	TextViewAmpOut.setText(AmpOutText);
