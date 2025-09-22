@@ -1,0 +1,151 @@
+plugins {
+    id 'java'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src', 'gen']
+            exclude 'test/**'
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources', 'res']
+        }
+    }
+}
+
+repositories {
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    implementation fileTree(dir: 'lib', include: ['*.jar'])
+
+    compileOnly 'org.robolectric:android-all:13-robolectric-9030017'
+
+    testImplementation 'org.robolectric:android-all:13-robolectric-9030017'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.11.1'
+    testImplementation 'org.mockito:mockito-core:4.11.0'
+    testRuntimeOnly 'org.robolectric:android-all:13-robolectric-9030017'
+    testRuntimeOnly 'org.robolectric:android-all-instrumented:13-robolectric-9030017-i4'
+    testRuntimeOnly 'org.robolectric:android-all-instrumented:14-robolectric-10818077-i4'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = JavaVersion.VERSION_1_8.toString()
+    targetCompatibility = JavaVersion.VERSION_1_8.toString()
+}
+
+def robolectricDepsDir = layout.buildDirectory.dir('robolectric-deps')
+def androidxTestLibDir = layout.buildDirectory.dir('androidx-test-libs')
+
+configurations {
+    robolectricRuntime
+    androidxTestAar
+}
+
+dependencies {
+    robolectricRuntime 'org.robolectric:android-all:13-robolectric-9030017'
+    robolectricRuntime 'org.robolectric:android-all-instrumented:13-robolectric-9030017-i4'
+    robolectricRuntime 'org.robolectric:android-all-instrumented:14-robolectric-10818077-i4'
+
+    androidxTestAar 'androidx.test:core:1.5.0@aar'
+    androidxTestAar 'androidx.test:monitor:1.6.1@aar'
+    androidxTestAar 'androidx.test:runner:1.5.2@aar'
+}
+
+sourceSets {
+    test {
+        compileClasspath += fileTree(androidxTestLibDir)
+        runtimeClasspath += fileTree(androidxTestLibDir)
+    }
+}
+
+tasks.register('prepareAndroidxTestJars') {
+    outputs.dir(androidxTestLibDir)
+    doLast {
+        def outputDir = androidxTestLibDir.get().asFile
+        if (outputDir.exists()) {
+            outputDir.deleteDir()
+        }
+        outputDir.mkdirs()
+        configurations.androidxTestAar.resolve().each { aarFile ->
+            def baseName = aarFile.name.replace('.aar', '')
+            def targetJar = new File(outputDir, "${baseName}.jar")
+            copy {
+                from zipTree(aarFile)
+                include 'classes.jar'
+                into outputDir
+                rename { targetJar.name }
+            }
+        }
+    }
+}
+
+tasks.register('prepareRobolectricDependencies') {
+    outputs.dir(robolectricDepsDir)
+    doLast {
+        def outputDir = robolectricDepsDir.get().asFile
+        if (outputDir.exists()) {
+            outputDir.deleteDir()
+        }
+        outputDir.mkdirs()
+
+        configurations.robolectricRuntime.resolve()
+        def resolvedArtifacts = configurations.robolectricRuntime.resolvedConfiguration.resolvedArtifacts
+        configurations.robolectricRuntime.dependencies.each { dep ->
+            if (dep instanceof ModuleDependency) {
+                def moduleDep = dep as ModuleDependency
+                def matchingArtifact = resolvedArtifacts.find { artifact ->
+                    artifact.moduleVersion.id.group == moduleDep.group && artifact.name == moduleDep.name
+                }
+                if (matchingArtifact != null) {
+                    def groupPath = moduleDep.group.replace('.', '/')
+                    def destination = new File(outputDir, "${groupPath}/${moduleDep.name}/${moduleDep.version}")
+                    destination.mkdirs()
+                    def extension = matchingArtifact.extension ?: matchingArtifact.type
+                    def targetName = "${moduleDep.name}-${moduleDep.version}.${extension}".toString()
+                    println "Copying ${matchingArtifact.file} -> ${new File(destination, targetName)}"
+                    copy {
+                        from matchingArtifact.file
+                        into destination
+                        rename { targetName }
+                    }
+                    copy {
+                        from matchingArtifact.file
+                        into outputDir
+                        rename { targetName }
+                    }
+                } else {
+                    println "Warning: no resolved artifact found for ${moduleDep.group}:${moduleDep.name}:${moduleDep.version}"
+                }
+            }
+        }
+    }
+}
+
+tasks.withType(Test).configureEach {
+    dependsOn('prepareRobolectricDependencies', 'prepareAndroidxTestJars')
+    useJUnit()
+    doFirst {
+        println "Using Robolectric dependency dir: ${robolectricDepsDir.get().asFile.absolutePath}"
+    }
+    systemProperty 'robolectric.offline', 'true'
+    systemProperty 'robolectric.dependencyDir', robolectricDepsDir.get().asFile.absolutePath
+    systemProperty 'robolectric.dependency.dir', robolectricDepsDir.get().asFile.absolutePath
+}
+
+tasks.named('compileTestJava').configure {
+    dependsOn('prepareAndroidxTestJars')
+}
+
+tasks.named('processTestResources').configure {
+    from('AndroidManifest.xml')
+}
