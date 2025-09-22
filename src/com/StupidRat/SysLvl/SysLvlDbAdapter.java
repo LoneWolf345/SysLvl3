@@ -170,15 +170,22 @@ public class SysLvlDbAdapter {
 				+ KEY_POSITION + " = " + position;
 		Log.v(SysLvlActivity.DEBUG_TAG, sql);
 
-		Cursor mCursor = database.rawQuery(sql, null);
-		if (mCursor != null) {
-			mCursor.moveToFirst();
+		Cursor mCursor = null;
+		try {
+			mCursor = database.rawQuery(sql, null);
+			if (mCursor == null || !mCursor.moveToFirst()) {
+				throw new SQLException("No span found at position " + position);
+			}
+			long rowId = mCursor.getLong(mCursor
+					.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_ROWID));
+			Log.v(SysLvlActivity.DEBUG_TAG,
+					"fetchRowId completed successfully returning rowId: " + rowId);
+			return rowId;
+		} finally {
+			if (mCursor != null) {
+				mCursor.close();
+			}
 		}
-		long rowId = mCursor.getLong(mCursor
-				.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_ROWID));
-		Log.v(SysLvlActivity.DEBUG_TAG,
-				"fetchRowId completed successfully returning rowId: " + rowId);
-		return rowId;
 
 	}
 	
@@ -218,24 +225,29 @@ public class SysLvlDbAdapter {
 		Cursor c = fetchAllSpans();
 
 		if (c != null) {
-			c.moveToFirst();
-                        long spanCount = fetchSpanCount();
-                        Log.v(SysLvlActivity.DEBUG_TAG, "Begin refreshSpanPositions loop.");
-                        for (int i = 0; i < spanCount; i++) {
-				long rowId = c.getLong(c
-						.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_ROWID));
-				String sql = "UPDATE " + SPANS_TABLE + " SET " + KEY_POSITION
-						+ " = " + i + " WHERE " + KEY_ROWID + " = " + rowId;
-				Log.v(SysLvlActivity.DEBUG_TAG, sql);
-				database.execSQL(sql);
-				c.moveToNext();
+			try {
+				if (c.moveToFirst()) {
+					long spanCount = fetchSpanCount();
+					Log.v(SysLvlActivity.DEBUG_TAG, "Begin refreshSpanPositions loop.");
+					for (int i = 0; i < spanCount; i++) {
+						long rowId = c.getLong(c
+								.getColumnIndexOrThrow(SysLvlDbAdapter.KEY_ROWID));
+						String sql = "UPDATE " + SPANS_TABLE + " SET " + KEY_POSITION
+								+ " = " + i + " WHERE " + KEY_ROWID + " = " + rowId;
+						Log.v(SysLvlActivity.DEBUG_TAG, sql);
+						database.execSQL(sql);
+						c.moveToNext();
+					}
+				}
+			} finally {
+				c.close();
 			}
 		}
 
 	}
 	
 	public void updateAllSpanAttenuation() {
-		
+
 		//Get a cursor with all spans
 		Cursor s = fetchAllSpans();
 		
@@ -263,57 +275,79 @@ public class SysLvlDbAdapter {
 		//Begin a loop that loads levels from a cursor, performs the calculations
 		//and saves the new levels.
 		if (s != null) {
-						
-                        Log.v(SysLvlActivity.DEBUG_TAG,"Begin updateAllSpanAttenuation loop.");
+			try {
+				Log.v(SysLvlActivity.DEBUG_TAG,"Begin updateAllSpanAttenuation loop.");
 
-                        s.moveToFirst();
-                        long spanCount = fetchSpanCount();
-                        for (int i = 0; i < spanCount; i++) {
-				
-				Log.v(SysLvlActivity.DEBUG_TAG,"\n------------ Span "+i+" ------------");
-				Log.v(SysLvlActivity.DEBUG_TAG,"Get data from span");
-				cableName = s.getString(s.getColumnIndexOrThrow(KEY_CABLENAME));
-				deviceName = s.getString(s.getColumnIndexOrThrow(KEY_DEVICENAME));
-				length = s.getDouble(s.getColumnIndexOrThrow(KEY_DISTANCE));
-				Log.v(SysLvlActivity.DEBUG_TAG,"cableName:"+cableName+", deviceName:"+deviceName+", length:"+length);
-				
-				Log.v(SysLvlActivity.DEBUG_TAG,"Get data from cable");
-				Cursor c = fetchSingleCable(cableName);				
-				cableLossRateLow = c.getDouble(c.getColumnIndexOrThrow("mhz55"));
-				cableLossRateHigh = c.getDouble(c.getColumnIndexOrThrow("mhz550"));
-				Log.v(SysLvlActivity.DEBUG_TAG,"cableLossLow:"+cableLossRateLow+", cableLossHigh:"+cableLossRateHigh);
-				
-				Log.v(SysLvlActivity.DEBUG_TAG,"Get data from Device");
-				Cursor t = fetchSingleDevice(deviceName);				
-				tapLossLow = t.getDouble(t.getColumnIndexOrThrow("tapmhz55"));
-				tapLossHigh = t.getDouble(t.getColumnIndexOrThrow("tapmhz550"));
-				hotLossLow = t.getDouble(t.getColumnIndexOrThrow("hotmhz55"));
-				hotLossHigh = t.getDouble(t.getColumnIndexOrThrow("hotmhz550"));
-				Log.v(SysLvlActivity.DEBUG_TAG,"deviceTapLossLow:"+tapLossLow+", deviceTapLossHigh:"+tapLossHigh+", deviceHotLossLow:"+hotLossLow+", deviceHotLossHigh:"+hotLossHigh);
-				
-				Log.v(SysLvlActivity.DEBUG_TAG, "Run Calculations");
-				double cableLossLow = calcLoss(length, cableLossRateLow);
-				double cableLossHigh = calcLoss(length, cableLossRateHigh);
-				
-				double tapOutputLow = incomingSignalLow - cableLossLow - tapLossLow;
-				double tapOutputHigh = incomingSignalHigh - cableLossHigh - tapLossHigh;
-				double hotOutputLow = incomingSignalLow - cableLossLow - hotLossLow;
-				double hotOutputHigh = incomingSignalHigh - cableLossHigh - hotLossHigh;
-				
-				long rowId = fetchSingleRowId(i);
-				
-				double roundedTapOutputHigh = round(tapOutputHigh,2,BigDecimal.ROUND_HALF_UP);
-				double roundedTapOutputLow = round(tapOutputLow,2,BigDecimal.ROUND_HALF_UP);
-				double roundedHotOutputHigh = round(hotOutputHigh,2,BigDecimal.ROUND_HALF_UP);
-				double roundedHotOutputLow = round(hotOutputLow,2,BigDecimal.ROUND_HALF_UP);
-				
-				Log.v(SysLvlActivity.DEBUG_TAG,"updateSingleSpan - TapHigh: "+roundedTapOutputHigh+", TapLow: "+roundedTapOutputLow+", HotHigh: "+roundedHotOutputHigh+", HotLow: "+roundedHotOutputLow);
-				updateSingleSpan(rowId, i, (int)length, cableName, deviceName, roundedTapOutputHigh, roundedTapOutputLow, roundedHotOutputHigh, roundedHotOutputLow);
-				
-				incomingSignalHigh = roundedHotOutputHigh;
-				incomingSignalLow = roundedHotOutputLow;
-				
-				s.moveToNext();
+				if (s.moveToFirst()) {
+					long spanCount = fetchSpanCount();
+					for (int i = 0; i < spanCount; i++) {
+
+						Log.v(SysLvlActivity.DEBUG_TAG,"\n------------ Span "+i+" ------------");
+						Log.v(SysLvlActivity.DEBUG_TAG,"Get data from span");
+						cableName = s.getString(s.getColumnIndexOrThrow(KEY_CABLENAME));
+						deviceName = s.getString(s.getColumnIndexOrThrow(KEY_DEVICENAME));
+						length = s.getDouble(s.getColumnIndexOrThrow(KEY_DISTANCE));
+						Log.v(SysLvlActivity.DEBUG_TAG,"cableName:"+cableName+", deviceName:"+deviceName+", length:"+length);
+
+						Log.v(SysLvlActivity.DEBUG_TAG,"Get data from cable");
+						Cursor c = null;
+						try {
+							c = fetchSingleCable(cableName);
+							if (c != null) {
+								cableLossRateLow = c.getDouble(c.getColumnIndexOrThrow("mhz55"));
+								cableLossRateHigh = c.getDouble(c.getColumnIndexOrThrow("mhz550"));
+							}
+						} finally {
+							if (c != null) {
+								c.close();
+							}
+						}
+						Log.v(SysLvlActivity.DEBUG_TAG,"cableLossLow:"+cableLossRateLow+", cableLossHigh:"+cableLossRateHigh);
+
+						Log.v(SysLvlActivity.DEBUG_TAG,"Get data from Device");
+						Cursor t = null;
+						try {
+							t = fetchSingleDevice(deviceName);
+							if (t != null) {
+								tapLossLow = t.getDouble(t.getColumnIndexOrThrow("tapmhz55"));
+								tapLossHigh = t.getDouble(t.getColumnIndexOrThrow("tapmhz550"));
+								hotLossLow = t.getDouble(t.getColumnIndexOrThrow("hotmhz55"));
+								hotLossHigh = t.getDouble(t.getColumnIndexOrThrow("hotmhz550"));
+							}
+						} finally {
+							if (t != null) {
+								t.close();
+							}
+						}
+						Log.v(SysLvlActivity.DEBUG_TAG,"deviceTapLossLow:"+tapLossLow+", deviceTapLossHigh:"+tapLossHigh+", deviceHotLossLow:"+hotLossLow+", deviceHotLossHigh:"+hotLossHigh);
+
+						Log.v(SysLvlActivity.DEBUG_TAG, "Run Calculations");
+						double cableLossLow = calcLoss(length, cableLossRateLow);
+						double cableLossHigh = calcLoss(length, cableLossRateHigh);
+
+						double tapOutputLow = incomingSignalLow - cableLossLow - tapLossLow;
+						double tapOutputHigh = incomingSignalHigh - cableLossHigh - tapLossHigh;
+						double hotOutputLow = incomingSignalLow - cableLossLow - hotLossLow;
+						double hotOutputHigh = incomingSignalHigh - cableLossHigh - hotLossHigh;
+
+						long rowId = fetchSingleRowId(i);
+
+						double roundedTapOutputHigh = round(tapOutputHigh,2,BigDecimal.ROUND_HALF_UP);
+						double roundedTapOutputLow = round(tapOutputLow,2,BigDecimal.ROUND_HALF_UP);
+						double roundedHotOutputHigh = round(hotOutputHigh,2,BigDecimal.ROUND_HALF_UP);
+						double roundedHotOutputLow = round(hotOutputLow,2,BigDecimal.ROUND_HALF_UP);
+
+						Log.v(SysLvlActivity.DEBUG_TAG,"updateSingleSpan - TapHigh: "+roundedTapOutputHigh+", TapLow: "+roundedTapOutputLow+", HotHigh: "+roundedHotOutputHigh+", HotLow: "+roundedHotOutputLow);
+						updateSingleSpan(rowId, i, (int)length, cableName, deviceName, roundedTapOutputHigh, roundedTapOutputLow, roundedHotOutputHigh, roundedHotOutputLow);
+
+						incomingSignalHigh = roundedHotOutputHigh;
+						incomingSignalLow = roundedHotOutputLow;
+
+						s.moveToNext();
+					}
+				}
+			} finally {
+				s.close();
 			}
 
 		}
