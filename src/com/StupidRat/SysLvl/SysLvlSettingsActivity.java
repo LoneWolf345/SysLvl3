@@ -97,6 +97,8 @@ public class SysLvlSettingsActivity extends SysLvlActivity {
                 }
             }
         });
+
+        updateCurrentLevels(prefs);
     }
 
     private void updateCurrentLevels(SharedPreferences prefs) {

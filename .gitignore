@@ -1,0 +1,4 @@
+# Ignore Gradle wrapper binary and build outputs to keep repository text-only
+.gradle/
+build/
+gradle/wrapper/gradle-wrapper.jar
