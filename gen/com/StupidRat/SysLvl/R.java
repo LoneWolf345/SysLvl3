@@ -253,6 +253,8 @@ containing a value of this type.
         public static final int edit_note=0x7f090007;
         public static final int geonotes=0x7f09000d;
         public static final int help=0x7f090008;
+        public static final int location_permission_denied_message=0x7f090018;
+        public static final int location_permission_required_message=0x7f090019;
         public static final int menu=0x7f09000a;
         public static final int menu_delete=0x7f090003;
         public static final int menu_insert=0x7f090002;

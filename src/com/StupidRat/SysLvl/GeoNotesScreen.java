@@ -4,9 +4,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.Manifest;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -24,6 +26,9 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.StupidRat.SysLvl.legacy.LegacyServiceLocator;
 import com.StupidRat.SysLvl.legacy.data.GeoNote;
 import com.StupidRat.SysLvl.legacy.data.GeoNoteRepository;
@@ -33,6 +38,7 @@ public class GeoNotesScreen extends ListActivity {
 
         private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
         private static final long MINIMUM_TIME_BETWEEN_UPDATES = 1000; // in Milliseconds
+        private static final int REQUEST_LOCATION_PERMISSION = 1001;
 
         protected LocationManager locationManager;
         protected Button retrieveLocationButton;
@@ -99,10 +105,20 @@ public class GeoNotesScreen extends ListActivity {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new MyLocationListener();
 
+        updateRetrieveLocationButtonState(hasLocationPermission());
+
                 retrieveLocationButton.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                                showCurrentLocation();
+                                if (hasLocationPermission()) {
+                                        showCurrentLocation();
+                                } else {
+                                        handleMissingLocationPermission();
+                                        ActivityCompat.requestPermissions(
+                                                        GeoNotesScreen.this,
+                                                        new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                                                        REQUEST_LOCATION_PERMISSION);
+                                }
                         }
                 });
     }
@@ -111,30 +127,19 @@ public class GeoNotesScreen extends ListActivity {
     protected void onResume() {
         super.onResume();
 
-        if (locationManager != null && locationListener != null) {
-                locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MINIMUM_TIME_BETWEEN_UPDATES,
-                                MINIMUM_DISTANCE_CHANGE_FOR_UPDATES,
-                                locationListener
-                );
-        }
+        requestLocationUpdatesIfPermitted();
         fillData();
     }
 
     @Override
     protected void onPause() {
-        if (locationManager != null && locationListener != null) {
-                locationManager.removeUpdates(locationListener);
-        }
+        stopLocationUpdates();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        if (locationManager != null && locationListener != null) {
-                locationManager.removeUpdates(locationListener);
-        }
+        stopLocationUpdates();
         if (geoNoteRepository != null) {
             geoNoteRepository.removeObserver(noteObserver);
             geoNoteRepository.close();
@@ -143,6 +148,11 @@ public class GeoNotesScreen extends ListActivity {
     }
 
         protected void showCurrentLocation() {
+
+                if (!hasLocationPermission()) {
+                        handleMissingLocationPermission();
+                        return;
+                }
 
                 TextView tvLocation = (TextView) findViewById(R.id.TextViewLocationAcuracy);
 
@@ -212,6 +222,87 @@ public class GeoNotesScreen extends ListActivity {
                 }
 
         }
+
+    private void requestLocationUpdatesIfPermitted() {
+        if (locationManager == null || locationListener == null) {
+            return;
+        }
+
+        if (hasLocationPermission()) {
+            updateRetrieveLocationButtonState(true);
+            startLocationUpdates();
+        } else {
+            handleMissingLocationPermission();
+            ActivityCompat.requestPermissions(
+                    this,
+                    new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                    REQUEST_LOCATION_PERMISSION);
+        }
+    }
+
+    private void startLocationUpdates() {
+        if (locationManager == null || locationListener == null || !hasLocationPermission()) {
+            return;
+        }
+
+        try {
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER,
+                    MINIMUM_TIME_BETWEEN_UPDATES,
+                    MINIMUM_DISTANCE_CHANGE_FOR_UPDATES,
+                    locationListener
+            );
+        } catch (SecurityException ignored) {
+            handleMissingLocationPermission();
+        }
+    }
+
+    private void stopLocationUpdates() {
+        if (locationManager != null && locationListener != null) {
+            locationManager.removeUpdates(locationListener);
+        }
+    }
+
+    private boolean hasLocationPermission() {
+        return ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+        ) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void updateRetrieveLocationButtonState(boolean enabled) {
+        if (retrieveLocationButton != null) {
+            retrieveLocationButton.setEnabled(enabled);
+            if (!enabled) {
+                retrieveLocationButton.setContentDescription(getString(R.string.location_permission_required_message));
+            } else {
+                retrieveLocationButton.setContentDescription(null);
+            }
+        }
+    }
+
+    private void handleMissingLocationPermission() {
+        updateRetrieveLocationButtonState(false);
+        TextView tvLocation = (TextView) findViewById(R.id.TextViewLocationAcuracy);
+        if (tvLocation != null) {
+            tvLocation.setText(R.string.location_permission_required_message);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults != null && grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                updateRetrieveLocationButtonState(true);
+                startLocationUpdates();
+            } else {
+                handleMissingLocationPermission();
+                Toast.makeText(this, R.string.location_permission_denied_message, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     private void fillData() {
         if (geoNoteRepository != null) {
