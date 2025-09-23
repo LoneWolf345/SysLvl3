@@ -5,6 +5,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
 
 import android.Manifest;
 import android.app.ListActivity;
@@ -47,7 +51,10 @@ public class GeoNotesScreen extends ListActivity {
 
         protected LocationManager locationManager;
         protected Button retrieveLocationButton;
+        private View retrieveLocationProgressChip;
         private LocationListener locationListener;
+    private ExecutorService geocodingExecutor;
+    private Future<?> pendingGeocodingTask;
 
     private static final int ACTIVITY_CREATE=0;
     private static final int ACTIVITY_EDIT=1;
@@ -106,6 +113,9 @@ public class GeoNotesScreen extends ListActivity {
 
                 //Location
         retrieveLocationButton = (Button) findViewById(R.id.retrieve_location_button);
+        retrieveLocationProgressChip = findViewById(R.id.retrieve_location_progress_chip);
+
+        geocodingExecutor = Executors.newSingleThreadExecutor();
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationListener = new MyLocationListener();
@@ -143,8 +153,20 @@ public class GeoNotesScreen extends ListActivity {
     }
 
     @Override
+    protected void onStop() {
+        cancelPendingGeocodingTask();
+        setRetrievingLocationInProgress(false);
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         stopLocationUpdates();
+        cancelPendingGeocodingTask();
+        if (geocodingExecutor != null) {
+            geocodingExecutor.shutdownNow();
+            geocodingExecutor = null;
+        }
         if (geoNoteRepository != null) {
             geoNoteRepository.removeObserver(noteObserver);
             geoNoteRepository.close();
@@ -159,61 +181,117 @@ public class GeoNotesScreen extends ListActivity {
                         return;
                 }
 
-                TextView tvLocation = (TextView) findViewById(R.id.TextViewLocationAcuracy);
+                final Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location == null) {
+                        Toast.makeText(this, "Current location unavailable", Toast.LENGTH_SHORT).show();
+                        return;
+                }
 
-                if (location != null) {
+                if (geocodingExecutor == null || geocodingExecutor.isShutdown()) {
+                        geocodingExecutor = Executors.newSingleThreadExecutor();
+                }
 
-                        String message = "";
-                        String body = "";
-                        String latitude = String.valueOf(location.getLatitude());
-                        String longitude = String.valueOf(location.getLongitude());
-                        String street = null;
-                        String state = null;
-                        String zip = null;
+                final double latitude = location.getLatitude();
+                final double longitude = location.getLongitude();
+                final float speed = location.getSpeed();
+                final float accuracy = location.getAccuracy();
+                final String latitudeString = String.valueOf(latitude);
+                final String longitudeString = String.valueOf(longitude);
 
-                        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-                        try {
-                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
-                                    location.getLongitude(), 1);
-                            if (addresses != null && !addresses.isEmpty()) {
-                                Address address = addresses.get(0);
-                                street = address.getThoroughfare();
-                                if (street == null) {
-                                    street = address.getFeatureName();
+                setRetrievingLocationInProgress(true);
+                cancelPendingGeocodingTask();
+
+                try {
+                        pendingGeocodingTask = geocodingExecutor.submit(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Geocoder geocoder = new Geocoder(GeoNotesScreen.this, Locale.getDefault());
+                                    String street = null;
+                                    String state = null;
+                                    String zip = null;
+
+                                try {
+                                        List<Address> addresses = geocoder.getFromLocation(latitude,
+                                                        longitude, 1);
+                                        if (addresses != null && !addresses.isEmpty()) {
+                                                Address address = addresses.get(0);
+                                                street = address.getThoroughfare();
+                                                if (street == null) {
+                                                        street = address.getFeatureName();
+                                                }
+                                                state = address.getAdminArea();
+                                                zip = address.getPostalCode();
+                                        }
+                                } catch (IOException e) {
+                                        Log.w("GeoNotesScreen", "Reverse geocoding failed", e);
                                 }
-                                state = address.getAdminArea();
-                                zip = address.getPostalCode();
-                            }
-                        } catch (IOException e) {
-                            Log.w("GeoNotesScreen", "Reverse geocoding failed", e);
-                        }
 
+                                if (Thread.currentThread().isInterrupted()) {
+                                        return;
+                                }
 
-                        message = String.format("Longitude: %1$s \n Latitude: %2$s",
-                                        location.getLongitude(), location.getLatitude());
+                                final String finalStreet = street;
+                                final String finalState = state;
+                                final String finalZip = zip;
+                                final String message = String.format("Longitude: %1$s \n Latitude: %2$s",
+                                                longitude, latitude);
+                                final String body = String.format("Location \n Longitude: %1$s \n Latitude: %2$s \n Speed: %3$s \n Acuracy: %4$s",
+                                                longitude, latitude, speed, accuracy);
 
+                                        runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                        pendingGeocodingTask = null;
+                                                        if (isFinishing()) {
+                                                                setRetrievingLocationInProgress(false);
+                                                                return;
+                                                        }
 
+                                                TextView tvLocation = (TextView) findViewById(R.id.TextViewLocationAcuracy);
+                                                if (tvLocation != null) {
+                                                        tvLocation.setText("Accuracy: " + String.valueOf(accuracy));
+                                                }
 
-                        body = String.format("Location \n Longitude: %1$s \n Latitude: %2$s \n Speed: %3$s \n Acuracy: %4$s",
-                                        location.getLongitude(), location.getLatitude(), location.getSpeed(), location.getAccuracy());
-
-                        tvLocation.setText("Accuracy: "+ String.valueOf(location.getAccuracy()));
-                        if (geoNoteRepository != null) {
-                            try {
-                                geoNoteRepository.createNote(message, body, latitude, longitude, street, state, zip);
-                            } catch (SQLException e) {
-                                Toast.makeText(GeoNotesScreen.this, "Unable to save note", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                        fillData();
-
-
-
+                                                if (geoNoteRepository != null) {
+                                                        try {
+                                                                geoNoteRepository.createNote(message, body, latitudeString, longitudeString, finalStreet, finalState, finalZip);
+                                                        } catch (SQLException e) {
+                                                                Toast.makeText(GeoNotesScreen.this, "Unable to save note", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                }
+                                                fillData();
+                                                setRetrievingLocationInProgress(false);
+                                        }
+                                        });
+                                }
+                        });
+                } catch (RejectedExecutionException e) {
+                        Log.w("GeoNotesScreen", "Unable to start geocoding task", e);
+                        setRetrievingLocationInProgress(false);
                 }
 
         }
+
+    private void setRetrievingLocationInProgress(boolean inProgress) {
+        if (retrieveLocationButton != null) {
+            if (inProgress) {
+                retrieveLocationButton.setEnabled(false);
+            } else {
+                updateRetrieveLocationButtonState(hasLocationPermission());
+            }
+        }
+        if (retrieveLocationProgressChip != null) {
+            retrieveLocationProgressChip.setVisibility(inProgress ? View.VISIBLE : View.GONE);
+        }
+    }
+
+    private void cancelPendingGeocodingTask() {
+        if (pendingGeocodingTask != null) {
+            pendingGeocodingTask.cancel(true);
+            pendingGeocodingTask = null;
+        }
+    }
 
         private class MyLocationListener implements LocationListener {
 

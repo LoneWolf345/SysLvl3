@@ -17,17 +17,31 @@
     		android:layout_alignParentLeft="true"
     		android:layout_centerVertical="true"
     		android:text="Acuracy # ft"/>
-    	<Button
-    		android:id="@+id/ButtonAddNote"
-    		android:layout_width="wrap_content"
-    		android:layout_height="40dp"
-    		android:layout_alignParentRight="true"
-    		android:text="Add Note"/> 
-    	<Button
-    		android:id="@+id/retrieve_location_button"
-    		android:layout_width="wrap_content"
-    		android:layout_height="40dp"
-    		android:layout_toLeftOf="@id/ButtonAddNote"
+        <Button
+                android:id="@+id/ButtonAddNote"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:text="Add Note"/>
+        <TextView
+                android:id="@+id/retrieve_location_progress_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/retrieve_location_button"
+                android:layout_marginRight="8dp"
+                android:paddingLeft="12dp"
+                android:paddingRight="12dp"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:background="@drawable/progress_chip_background"
+                android:text="Retrieving..."
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:visibility="gone"/>
+        <Button
+                android:id="@+id/retrieve_location_button"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_toLeftOf="@id/ButtonAddNote"
     		android:text="Location"/>
 
     </RelativeLayout>
