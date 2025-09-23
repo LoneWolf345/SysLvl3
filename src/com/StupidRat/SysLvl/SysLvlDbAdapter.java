@@ -75,8 +75,8 @@ public class SysLvlDbAdapter {
 	public Cursor fetchAllSpans() {
 		Log.v(SysLvlActivity.DEBUG_TAG, "fetchAllSpans");
 
-		String sql = "SELECT * FROM " + SPANS_TABLE + " WHERE " + KEY_POSITION
-				+ " >= 0 GROUP BY position";
+                String sql = "SELECT * FROM " + SPANS_TABLE + " WHERE " + KEY_POSITION
+                                + " >= 0 ORDER BY " + KEY_POSITION + " ASC";
 		Log.v(SysLvlActivity.DEBUG_TAG, sql);
 
 		return database.rawQuery(sql, null);
