@@ -21,6 +21,7 @@
     <string name="menu_item_play">Play Game</string>
     <string name="menu_item_scores">View Scores</string>
     <string name="menu_item_help">Help</string>
+    <string name="more">More options</string>
     <string name="summary_blank">Cable:none \nLenght:000ft \nDevice:none </string>
     <string name="tap_blank">Out of Tap\nHigh Mhz:00.0\nLow Mhz:00.0</string>
     <string name="ongoing_blank">Ongoing\nHigh Mhz:00.0\nLow Mhz:00.0</string>

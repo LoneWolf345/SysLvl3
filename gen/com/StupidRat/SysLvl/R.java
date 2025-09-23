@@ -206,9 +206,11 @@ containing a value of this type.
         public static final int l_list=0x7f0b004c;
         public static final int label=0x7f0b001e;
         public static final int retrieve_location_button=0x7f0b0010;
+        public static final int retrieve_location_progress_chip=0x7f0b004d;
         public static final int scannerBtn=0x7f0b0005;
         public static final int scroll=0x7f0b002f;
-        public static final int t_name=0x7f0b0020;
+        public static final int primary_text=0x7f0b0050;
+        public static final int secondary_text=0x7f0b0051;
         public static final int text1=0x7f0b002c;
         public static final int textView1=0x7f0b0004;
         public static final int textView2=0x7f0b0002;
@@ -262,6 +264,7 @@ containing a value of this type.
         public static final int menu_item_play=0x7f090010;
         public static final int menu_item_scores=0x7f090011;
         public static final int menu_item_settings=0x7f09000f;
+        public static final int more=0x7f09001a;
         public static final int no_notes=0x7f090001;
         public static final int ongoing_blank=0x7f090015;
         public static final int settings=0x7f09000b;
