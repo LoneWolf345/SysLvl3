@@ -1,14 +1,18 @@
 package com.StupidRat.SysLvl;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import android.Manifest;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,6 +29,7 @@ import android.widget.ListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -162,11 +167,28 @@ public class GeoNotesScreen extends ListActivity {
 
                         String message = "";
                         String body = "";
-                        String latitude = "";
-                        String longitude = "";
-                        String street = "";
-                        String state = "";
-                        String zip = "";
+                        String latitude = String.valueOf(location.getLatitude());
+                        String longitude = String.valueOf(location.getLongitude());
+                        String street = null;
+                        String state = null;
+                        String zip = null;
+
+                        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
+                                    location.getLongitude(), 1);
+                            if (addresses != null && !addresses.isEmpty()) {
+                                Address address = addresses.get(0);
+                                street = address.getThoroughfare();
+                                if (street == null) {
+                                    street = address.getFeatureName();
+                                }
+                                state = address.getAdminArea();
+                                zip = address.getPostalCode();
+                            }
+                        } catch (IOException e) {
+                            Log.w("GeoNotesScreen", "Reverse geocoding failed", e);
+                        }
 
 
                         message = String.format("Longitude: %1$s \n Latitude: %2$s",
