@@ -45,7 +45,7 @@ sequenceDiagram
 `GeoNotesScreen.showCurrentLocation()` snapshots the device's GPS reading into the local notes database and immediately refreshes the list.
 
 - **Inputs:** A `LocationManager` delivers `GPS_PROVIDER` updates every 1,000 ms or when the device has moved 1 meter, whichever comes first. When the user taps **Retrieve Location**, the screen pulls the last known fix and displays its reported accuracy.【F:src/com/StupidRat/SysLvl/GeoNotesScreen.java†L24-L86】
-- **Processing:** The method formats the longitude/latitude pair into a human-readable title and body, then calls `GeoNotesDbAdapter.createNote(...)` to persist the reading (plus placeholders for lat/long/street/state/zip fields) into the `notes` table.【F:src/com/StupidRat/SysLvl/GeoNotesScreen.java†L88-L137】【F:src/com/StupidRat/SysLvl/GeoNotesDbAdapter.java†L12-L104】
+- **Processing:** The method formats the longitude/latitude pair into a human-readable title and body, then calls `GeoNotesDbAdapter.createNote(...)` to persist the reading along with the captured latitude/longitude strings and any reverse-geocoded street/state/zip metadata when available.【F:src/com/StupidRat/SysLvl/GeoNotesScreen.java†L88-L153】【F:src/com/StupidRat/SysLvl/GeoNotesDbAdapter.java†L12-L104】
 - **Outputs:** After writing, it invokes `fillData()` to query all notes and bind them to the `ListView` through a `SimpleCursorAdapter`, ensuring the newest snapshot is visible immediately.【F:src/com/StupidRat/SysLvl/GeoNotesScreen.java†L139-L193】
 
 ```mermaid
@@ -75,3 +75,9 @@ Downstream services should continue to honor the following persisted configurati
 - GPS updates arrive from `LocationManager.GPS_PROVIDER` every 1 second (`MINIMUM_TIME_BETWEEN_UPDATES = 1000`) or 1 meter of movement (`MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1`). Services consuming these notes should assume snapshots can be as frequent as this cadence, though captures only occur when the user explicitly requests them.【F:src/com/StupidRat/SysLvl/GeoNotesScreen.java†L24-L115】
 
 Maintaining these assumptions ensures the existing attenuation calculations and geo-note synchronization logic stay aligned as the system evolves.
+
+### Manual Test: Geo Note Coordinate Persistence
+
+1. Launch **GeoNotesScreen** and tap **Retrieve Location** to capture a new note.
+2. Open the created entry in **GeoNoteEdit**.
+3. Confirm the latitude and longitude fields display the stored coordinate strings from the captured fix.
