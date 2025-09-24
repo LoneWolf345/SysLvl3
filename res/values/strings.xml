@@ -14,6 +14,10 @@
     <string name="settings">Settings Screen</string>
     <string name="syslvl">System Levels</string>
     <string name="geonotes">Geo Notes</string>
+    <string name="action_add_span">Add Span</string>
+    <string name="action_add_note">Add Note</string>
+    <string name="action_retrieve_location">Retrieve Location</string>
+    <string name="label_retrieving_location">Retrieving…</string>
     <string name="location_permission_required_message">Location permission is required to retrieve GPS notes.</string>
     <string name="location_permission_denied_message">Location permission denied. Enable it in Settings to continue.</string>
     <string name="app_version_info">V 3.0</string>
