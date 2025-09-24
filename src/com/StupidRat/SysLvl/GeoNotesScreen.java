@@ -11,7 +11,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionException;
 
 import android.Manifest;
-import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -27,10 +26,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
+import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
@@ -41,8 +40,10 @@ import androidx.core.content.ContextCompat;
 import com.StupidRat.SysLvl.legacy.LegacyServiceLocator;
 import com.StupidRat.SysLvl.legacy.data.GeoNote;
 import com.StupidRat.SysLvl.legacy.data.GeoNoteRepository;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 
-public class GeoNotesScreen extends ListActivity {
+public class GeoNotesScreen extends SysLvlActivity {
 
 
         private static final long MINIMUM_DISTANCE_CHANGE_FOR_UPDATES = 1; // in Meters
@@ -50,7 +51,7 @@ public class GeoNotesScreen extends ListActivity {
         private static final int REQUEST_LOCATION_PERMISSION = 1001;
 
         protected LocationManager locationManager;
-        protected Button retrieveLocationButton;
+        protected MaterialButton retrieveLocationButton;
         private View retrieveLocationProgressChip;
         private LocationListener locationListener;
     private ExecutorService geocodingExecutor;
@@ -66,6 +67,7 @@ public class GeoNotesScreen extends ListActivity {
     private final ArrayList<GeoNote> notes = new ArrayList<GeoNote>();
     private final ArrayList<String> noteTitles = new ArrayList<String>();
     private ArrayAdapter<String> notesAdapter;
+    private ListView notesListView;
     private final GeoNoteRepository.Observer noteObserver = new GeoNoteRepository.Observer() {
         @Override
         public void onNotesChanged(List<GeoNote> updatedNotes) {
@@ -89,8 +91,28 @@ public class GeoNotesScreen extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.geonotes);
 
+        MaterialToolbar toolbar = (MaterialToolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            setSupportActionBar(toolbar);
+            toolbar.setTitle(R.string.geonotes);
+        }
+
         notesAdapter = new ArrayAdapter<String>(this, R.layout.notes_row, R.id.text1, noteTitles);
-        setListAdapter(notesAdapter);
+        notesListView = (ListView) findViewById(R.id.geo_notes_list);
+        if (notesListView != null) {
+            notesListView.setAdapter(notesAdapter);
+            TextView emptyView = (TextView) findViewById(R.id.empty_view);
+            if (emptyView != null) {
+                notesListView.setEmptyView(emptyView);
+            }
+            notesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    openNoteAtPosition(position);
+                }
+            });
+            registerForContextMenu(notesListView);
+        }
 
         try {
             geoNoteRepository = LegacyServiceLocator.provideGeoNoteRepository(this);
@@ -100,19 +122,19 @@ public class GeoNotesScreen extends ListActivity {
         }
 
         fillData();
-        registerForContextMenu(getListView());
 
         // Create add note button listener
-        Button btnAddNote = (Button) findViewById(R.id.ButtonAddNote);
-                btnAddNote.setOnClickListener(new View.OnClickListener(){
-                        public void onClick(View view) {
-                                createNote();
-                        }
-                });
+        MaterialButton btnAddNote = (MaterialButton) findViewById(R.id.ButtonAddNote);
+        if (btnAddNote != null) {
+            btnAddNote.setOnClickListener(new View.OnClickListener(){
+                    public void onClick(View view) {
+                            createNote();
+                    }
+            });
+        }
 
-
-                //Location
-        retrieveLocationButton = (Button) findViewById(R.id.retrieve_location_button);
+        // Location controls
+        retrieveLocationButton = (MaterialButton) findViewById(R.id.retrieve_location_button);
         retrieveLocationProgressChip = findViewById(R.id.retrieve_location_progress_chip);
 
         geocodingExecutor = Executors.newSingleThreadExecutor();
@@ -122,6 +144,7 @@ public class GeoNotesScreen extends ListActivity {
 
         updateRetrieveLocationButtonState(hasLocationPermission());
 
+        if (retrieveLocationButton != null) {
                 retrieveLocationButton.setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -136,6 +159,7 @@ public class GeoNotesScreen extends ListActivity {
                                 }
                         }
                 });
+        }
     }
 
     @Override
@@ -433,38 +457,42 @@ public class GeoNotesScreen extends ListActivity {
     }
 
     @Override
-        public void onCreateContextMenu(ContextMenu menu, View v,
-                        ContextMenuInfo menuInfo) {
-                super.onCreateContextMenu(menu, v, menuInfo);
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                    ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
         menu.add(0, DELETE_ID, 0, R.string.menu_delete);
-        }
+    }
 
     @Override
-        public boolean onContextItemSelected(MenuItem item) {
-                switch(item.getItemId()) {
+    public boolean onContextItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
         case DELETE_ID:
                 AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-                if (geoNoteRepository != null) {
-                    try {
-                        geoNoteRepository.deleteNote(info.id);
-                    } catch (SQLException e) {
-                        Toast.makeText(this, "Unable to delete note", Toast.LENGTH_SHORT).show();
+                if (info != null) {
+                    int position = info.position;
+                    if (position >= 0 && position < notes.size()) {
+                        GeoNote note = notes.get(position);
+                        if (geoNoteRepository != null) {
+                            try {
+                                geoNoteRepository.deleteNote(note.getId());
+                            } catch (SQLException e) {
+                                Toast.makeText(this, "Unable to delete note", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        fillData();
                     }
                 }
-                fillData();
                 return true;
-                }
-                return super.onContextItemSelected(item);
         }
+        return super.onContextItemSelected(item);
+    }
 
     private void createNote() {
         Intent i = new Intent(this, GeoNoteEdit.class);
         startActivityForResult(i, ACTIVITY_CREATE);
     }
 
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
+    private void openNoteAtPosition(int position) {
         if (position >= 0 && position < notes.size()) {
             GeoNote note = notes.get(position);
             Intent i = new Intent(this, GeoNoteEdit.class);

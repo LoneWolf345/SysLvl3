@@ -207,6 +207,9 @@ containing a value of this type.
         public static final int label=0x7f0b001e;
         public static final int retrieve_location_button=0x7f0b0010;
         public static final int retrieve_location_progress_chip=0x7f0b004d;
+        public static final int empty_view=0x7f0b0052;
+        public static final int geo_notes_list=0x7f0b0053;
+        public static final int toolbar=0x7f0b0054;
         public static final int scannerBtn=0x7f0b0005;
         public static final int scroll=0x7f0b002f;
         public static final int primary_text=0x7f0b0050;
@@ -265,6 +268,10 @@ containing a value of this type.
         public static final int menu_item_scores=0x7f090011;
         public static final int menu_item_settings=0x7f09000f;
         public static final int more=0x7f09001a;
+        public static final int action_add_span=0x7f09001b;
+        public static final int action_add_note=0x7f09001c;
+        public static final int action_retrieve_location=0x7f09001d;
+        public static final int label_retrieving_location=0x7f09001e;
         public static final int no_notes=0x7f090001;
         public static final int ongoing_blank=0x7f090015;
         public static final int settings=0x7f09000b;
@@ -288,6 +295,7 @@ containing a value of this type.
         public static final int Animations_PopUpMenu_Center=0x7f0a0008;
         public static final int Animations_PopUpMenu_Left=0x7f0a0006;
         public static final int Animations_PopUpMenu_Right=0x7f0a0007;
+        public static final int AppTheme=0x7f0a0009;
     }
     public static final class styleable {
         /** Attributes that can be used with a com_admob_android_ads_AdView.

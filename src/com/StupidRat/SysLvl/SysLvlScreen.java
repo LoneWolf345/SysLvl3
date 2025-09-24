@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,6 +20,8 @@ import android.widget.PopupWindow.OnDismissListener;
 import com.StupidRat.SysLvl.legacy.LegacyServiceLocator;
 import com.StupidRat.SysLvl.legacy.data.Span;
 import com.StupidRat.SysLvl.legacy.data.SpanRepository;
+import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.button.MaterialButton;
 
 public class SysLvlScreen extends SysLvlActivity {
 
@@ -46,6 +47,12 @@ public class SysLvlScreen extends SysLvlActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.syslvl);
 
+        MaterialToolbar toolbar = (MaterialToolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+                setSupportActionBar(toolbar);
+                toolbar.setTitle(R.string.syslvl);
+        }
+
         adapter = new NewQAAdapter(this);
         adapter.setData(new String[0]);
 
@@ -60,7 +67,7 @@ public class SysLvlScreen extends SysLvlActivity {
         listView.setAdapter(adapter);
         configureListInteractions(listView);
 
-        Button addSpanButton = (Button) findViewById(R.id.ButtonAddSpan);
+        MaterialButton addSpanButton = (MaterialButton) findViewById(R.id.ButtonAddSpan);
         addSpanButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
                         createSpan();

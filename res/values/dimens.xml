@@ -10,4 +10,14 @@
         name="screen_title_size">16pt</dimen>
     <dimen
         name="menu_item_size">15pt</dimen>
+    <dimen
+        name="spacing_xs">4dp</dimen>
+    <dimen
+        name="spacing_sm">8dp</dimen>
+    <dimen
+        name="spacing_md">16dp</dimen>
+    <dimen
+        name="spacing_lg">24dp</dimen>
+    <dimen
+        name="spacing_xl">32dp</dimen>
 </resources>

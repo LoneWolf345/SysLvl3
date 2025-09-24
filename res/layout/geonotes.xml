@@ -1,82 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-	xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:myapp="http://schemas.android.com/apk/res/com.StupidRat.SysLvl"
-    android:orientation="vertical"
-    android:layout_width="wrap_content"
-    android:layout_height="fill_parent">
-    
-    <RelativeLayout
-    	android:id="@+id/RelativeLayoutTopBar"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content">
-    	<TextView
-    		android:id="@+id/TextViewLocationAcuracy"
-    		android:layout_width="wrap_content"
-    		android:layout_height="wrap_content"
-    		android:layout_alignParentLeft="true"
-    		android:layout_centerVertical="true"
-    		android:text="Acuracy # ft"/>
-        <Button
-                android:id="@+id/ButtonAddNote"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_alignParentRight="true"
-                android:text="Add Note"/>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:title="@string/geonotes" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/geonotes_content_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="@dimen/spacing_md"
+        android:paddingTop="@dimen/spacing_md"
+        android:paddingEnd="@dimen/spacing_md"
+        android:paddingBottom="@dimen/spacing_xl"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
         <TextView
-                android:id="@+id/retrieve_location_progress_chip"
-                android:layout_width="wrap_content"
+            android:id="@+id/TextViewLocationAcuracy"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_sm"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textColor="?android:attr/textColorPrimary"
+            app:layout_constraintEnd_toStartOf="@id/retrieve_location_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Accuracy 5 ft" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/retrieve_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/action_retrieve_location"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/retrieve_location_progress_chip"
+            style="@style/Widget.MaterialComponents.Chip.Assist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_sm"
+            android:text="@string/label_retrieving_location"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@id/retrieve_location_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/TextViewLocationAcuracy"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ButtonAddNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_sm"
+            android:layout_marginBottom="@dimen/spacing_md"
+            android:text="@string/action_add_note"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/ad_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_lg"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="@dimen/spacing_sm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/retrieve_location_progress_chip">
+
+            <com.admob.android.ads.AdView
+                android:id="@+id/ad2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toLeftOf="@id/retrieve_location_button"
-                android:layout_marginRight="8dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="12dp"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:background="@drawable/progress_chip_background"
-                android:text="Retrieving..."
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:visibility="gone"/>
-        <Button
-                android:id="@+id/retrieve_location_button"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_toLeftOf="@id/ButtonAddNote"
-    		android:text="Location"/>
+                android:layout_gravity="center"
+                app:backgroundColor="#000000"
+                app:primaryTextColor="#FFFFFF"
+                app:secondaryTextColor="#CCCCCC" />
 
-    </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
 
-    <RelativeLayout
-    	android:id="@+id/RelativeLayoutAd"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content">
-    
-    	<com.admob.android.ads.AdView
-			android:id="@+id/ad2"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:layout_alignParentTop="True"
-			myapp:backgroundColor="#000000"
-			myapp:primaryTextColor="#FFFFFF"
-			myapp:secondaryTextColor="#CCCCCC"/>	
-    
-    </RelativeLayout>   
-    <RelativeLayout
-    	android:id="@+id/RelativeLayoutList"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content">
-    	
-    	<!--  android:id="@+id/android:list" -->
-    	<ListView android:id="@+id/android:list" 
-    		android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-    		android:layout_marginTop="10dp"
-    		android:layout_alignParentTop="true"/>
-    		
-  		<TextView android:id="@+id/android:empty"
-          	android:layout_width="wrap_content"
-        	android:layout_height="wrap_content"
-        	android:text="No Notes!"/>
-    </RelativeLayout>
- 
-</LinearLayout>
+        <ListView
+            android:id="@+id/geo_notes_list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:layout_marginBottom="@dimen/spacing_md"
+            android:clipToPadding="false"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="@dimen/spacing_xs"
+            android:paddingBottom="@dimen/spacing_md"
+            android:scrollbarStyle="outsideOverlay"
+            android:transcriptMode="normal"
+            app:layout_constraintBottom_toTopOf="@id/ButtonAddNote"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ad_container"
+            tools:listitem="@layout/notes_row" />
+
+        <TextView
+            android:id="@+id/empty_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/no_notes"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?android:attr/textColorSecondary"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/ButtonAddNote"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ad_container"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
